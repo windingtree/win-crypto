@@ -1,20 +1,15 @@
----
-author: mfw78 <mfw78@protonmail.com>
----
-
-# WT Smart Contract Template
+# WinPay
+Win.so crypto payments manager contract
 
 ## Overview
 
-This is a template repository for smart contract development in **Hardhat**. This repository
-contains the base tools required for testing, coverage analysis, and deployment. Tools
-used include:
+The `WinPay` contract is dedicated to handling payments in stable coins for service.
 
-- ethers
-- hardhat / hardhat-deploy
-- openzeppelin
-- typescript / typechain
-- solhint / gas-reporter / soliditiy-coverage
+To start accepting payments the service must be registered in the contract.
+
+Every payment can be limited in time, so if your offer has expiration your payments will arrive in time or not at all.
+
+Every payment will be linked to the unique service Id to make a reference between your off-chain accounting system and on-chain payment in crypto.
 
 ## Commits
 
@@ -40,8 +35,8 @@ are ignored by `solidity-coverage`.
 1. Ensure **100% solidity coverage** in tests prior to production deployment.
 2. All `Ownable` contracts **MUST** have their owner set to the community multi-sig and/or
    `TimelockController`. **NO** contracts must be allowed to retain **ANY** deployer addresses
-   in their configurtion.
-3. **MINIMUM** two reviewers prior to commiting to the main branch.
+   in their configuration.
+3. **MINIMUM** two reviewers prior to committing to the main branch.
 
 ### Scripts
 
