@@ -11,6 +11,59 @@ Every payment can be limited in time, so if your offer has expiration your payme
 
 Every payment will be linked to the unique service Id to make a reference between your off-chain accounting system and on-chain payment in crypto.
 
+`WinPay` can handle payments supporting `permit` (EIP2612) feature.
+
+For security sake balances and funds are separated in to different types of contracts. Balances are handled by the `Ledger` contract but funds sre handled by `Asset`-type of contracts. Every crypto asset supported by the `WinPay` must have its dedicated `Asset` instance. Every service provider can create his own `Asset` contract.
+
+Assets in `WinPay` can be regular ERC20 tokens of `wrapped` ERC20 tokens. In the second case customers will be able to pay using native tokens (they are will be automatically `wrapped`).
+
+## Contract architecture
+
+```mermaid
+flowchart TD
+  win[WinPay]
+  ledger[Ledger]
+  asset[Asset]
+
+  ledger -- authorized at -->  win
+  ledger -- authorized at -->  asset
+
+  win -- joins assets to --> asset
+  win -- updates balance --> ledger
+  asset -- updates balance --> ledger
+```
+
+## Use cases
+
+### Making a deal
+
+The `customer` wants to pay for the `service` using his tokens (stable coins or native tokens).
+
+To make a deal he has to know:
+
+- the provider Id (unique `bytes32` string)
+- the service Id (unique `bytes32` string)
+- the service offer expiration time (if this time will be reached but the deal will not be done the transaction will be reverted)
+- address of the proper `Asset` contract
+- the value of the asset (the service cost)
+
+Optionally, if he wants to pay with tokens but won't to send `approval` transaction and the token supports EIP2612 the `customer` can generate `permit` signature and payment will be made automatically.
+
+Using known information the `customer` should call one of two variants of the `deal` function (with and without `permit`).
+
+### The deal refund
+
+The service provider wants to refund funds paid by the customer.
+
+To refund funds he has to know:
+
+- the service Id (unique `bytes32` string)
+- address of the proper `Asset` contract
+
+Using known information the `provider` should call the `refund` function. If the deal associated with given service Id exists and other conditions are fulfilled the deal will be transferred to the `REFUNDED` state and funds will be returned to the `customer` account.
+
+>! Current version of the `WinPay` does not `unwrapping` wrapped funds during refunds and returns `wrapped` asset even if the `customer` made payment with native tokens.
+
 ## Commits
 
 To commit to the repository after staging the commit:
