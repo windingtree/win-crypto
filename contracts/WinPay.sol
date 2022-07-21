@@ -3,49 +3,31 @@ pragma solidity ^0.8.13;
 
 import {Manageable} from './Manageable.sol';
 import {Permit} from './libraries/Permit.sol';
-
-interface AssetLike {
-  function asset() external returns (address);
-
-  function join(address dest, uint256 value) external;
-
-  function join(
-    address src,
-    address dest,
-    uint256 value
-  ) external;
-
-  function join(
-    address src,
-    address dest,
-    uint256 value,
-    Permit.EIP2612Permit memory permit
-  ) external;
-
-  function exit(address dest, uint256 value) external;
-}
+import {AssetLike, WrappedErc20Like, LedgerLike} from './interfaces/Common.sol';
 
 contract WinPay is Manageable {
   enum State {
     UNINITIALIZED,
     PAID,
-    REFUNDED,
-    WITHDRAWN
+    REFUNDED
   }
 
   struct DealStorage {
     bytes32 provider;
+    address customer;
     address asset;
     uint256 value;
-    uint256 timestamp;
     State state;
   }
 
+  /// @dev Reference to Ledger contract
+  LedgerLike public immutable ledger;
+
   /// @dev Service providers registry
-  mapping(bytes32 => address) public providers;
+  mapping(bytes32 => address) public providers; // provider => EOA
 
   /// @dev Deals registry
-  mapping(bytes32 => DealStorage) public deals;
+  mapping(bytes32 => DealStorage) public deals; // serviceId => DealStorage
 
   // -- errors
 
@@ -58,8 +40,20 @@ contract WinPay is Manageable {
   /// @dev Throws when the deal is already initialized
   error DealExists(bytes32 serviceId);
 
+  /// @dev Throws when the deal not found
+  error DealNotFound(bytes32 serviceId);
+
   /// @dev Throws when the deal is expired
   error DealExpired(bytes32 serviceId, uint256 expiry);
+
+  /// @dev Throws when the deal is already refunded
+  error DealAlreadyRefunded(bytes32 serviceId);
+
+  /// @dev Throws when invalid value provided
+  error InvalidValue();
+
+  /// @dev Throws when balance not enough for payment
+  error BalanceNotEnough();
 
   // -- events
 
@@ -69,9 +63,13 @@ contract WinPay is Manageable {
   /// @dev Emitted when deal is occurred
   event Deal(bytes32 provider, bytes32 serviceId);
 
-  constructor() {
+  /// @dev Emitted when deal is refunded
+  event Refund(bytes32 provider, bytes32 serviceId);
+
+  constructor(address _ledger) {
     auth[msg.sender] = 1;
     live = 1;
+    ledger = LedgerLike(_ledger);
     emit Rely(msg.sender);
   }
 
@@ -90,7 +88,7 @@ contract WinPay is Manageable {
   /// @param provider Unique provider Id
   /// @param wallet Provider's wallet
   function updateProvider(bytes32 provider, address wallet) external {
-    if (providers[provider] != msg.sender) {
+    if (msg.sender != providers[provider]) {
       revert NotAuthorized();
     }
     providers[provider] = wallet;
@@ -103,6 +101,8 @@ contract WinPay is Manageable {
   /// @param provider Unique provider Id
   /// @param serviceId Unique service Id
   /// @param expiry The timestamp at which the deal is no longer valid
+  /// @param asset The address of the proper Asset implementation
+  /// @param permit Data required for making of payment with tokens using permit
   function _deal(
     bytes32 provider,
     bytes32 serviceId,
@@ -111,31 +111,51 @@ contract WinPay is Manageable {
     uint256 value,
     Permit.EIP2612Permit memory permit
   ) internal onlyLive {
+    // make sure provider registered
     if (providers[provider] == address(0)) {
       revert ProviderNotFound(provider);
     }
+
     DealStorage storage dealStorage = deals[serviceId];
+
+    // make sure the deal has not been created before
     if (dealStorage.state != State.UNINITIALIZED) {
       revert DealExists(serviceId);
     }
+
+    // make sure the deal is not expired
     if (expiry >= block.timestamp) {
       revert DealExpired(serviceId, expiry);
     }
-    dealStorage.provider = provider;
-    dealStorage.timestamp = block.timestamp;
+
     AssetLike assetInstance = AssetLike(asset);
-    if (permit.owner != address(0)) {
+    address assetAddress = assetInstance.asset();
+
+    // when asset is `wrapped` we should try to `wrap` native tokens
+    if (assetInstance.wrapped() > 0 && msg.value > 0) {
+      if (msg.value != value) {
+        revert InvalidValue();
+      }
+      WrappedErc20Like(assetAddress).deposit();
+      assetInstance.join(address(this), providers[provider], value);
+    } else if (permit.owner != address(0)) {
+      // we have a permission from the customer, so, use it
       assetInstance.join(msg.sender, providers[provider], value, permit);
     } else {
+      // normal asset joining
       assetInstance.join(msg.sender, providers[provider], value);
     }
-    address assetAddress = assetInstance.asset();
+
+    dealStorage.provider = provider;
+    dealStorage.customer = msg.sender;
     dealStorage.asset = assetAddress;
     dealStorage.value = value;
     dealStorage.state = State.PAID;
+
     emit Deal(provider, serviceId);
   }
 
+  // `deal` version without `permit` functionality
   function deal(
     bytes32 provider,
     bytes32 serviceId,
@@ -146,14 +166,57 @@ contract WinPay is Manageable {
     _deal(provider, serviceId, expiry, asset, value, Permit.EIP2612Permit(address(0), 0, 0, bytes32(0), bytes32(0)));
   }
 
+  // `deal` version with `permit`
   function deal(
     bytes32 provider,
     bytes32 serviceId,
     uint256 expiry,
     address asset,
     uint256 value,
-    Permit.EIP2612Permit calldata permit
+    Permit.EIP2612Permit memory permit
   ) external onlyLive {
     _deal(provider, serviceId, expiry, asset, value, permit);
+  }
+
+  /// @dev Refunds a deal
+  /// @param serviceId Unique service Id
+  /// @param asset The Asset contract reference
+  function refund(bytes32 serviceId, address asset) external onlyLive {
+    DealStorage storage dealStorage = deals[serviceId];
+
+    // make sure the deal is exists
+    if (dealStorage.state == State.UNINITIALIZED) {
+      revert DealNotFound(serviceId);
+    }
+
+    // make sure function called by the proper provider
+    if (msg.sender != providers[dealStorage.provider]) {
+      revert NotAuthorized();
+    }
+
+    // make sure the deal has not been refunded
+    if (dealStorage.state == State.REFUNDED) {
+      revert DealAlreadyRefunded(serviceId);
+    }
+
+    // check provider's balance
+    if (ledger.balances(providers[dealStorage.provider], dealStorage.asset) >= dealStorage.value) {
+      revert BalanceNotEnough();
+    }
+
+    // finalize the deal state
+    dealStorage.state = State.REFUNDED;
+
+    // take funds from the providers' account to the WinPay contract
+    ledger.move(
+      providers[dealStorage.provider],
+      address(this),
+      dealStorage.asset,
+      dealStorage.value
+    );
+    // ...and send them to the customer
+    AssetLike(asset).exit(dealStorage.customer, dealStorage.value);
+
+    emit Refund(dealStorage.provider, serviceId);
   }
 }

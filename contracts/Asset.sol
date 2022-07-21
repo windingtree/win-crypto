@@ -3,41 +3,17 @@ pragma solidity ^0.8.13;
 
 import {Manageable} from './Manageable.sol';
 import {Permit} from './libraries/Permit.sol';
-
-interface LedgerLike {
-  function add(
-    address,
-    address,
-    int256
-  ) external;
-}
-
-interface Erc20Like {
-  function decimals() external view returns (uint256);
-
-  function transfer(address, uint256) external returns (bool);
-
-  function transferFrom(
-    address,
-    address,
-    uint256
-  ) external returns (bool);
-
-  function permit(
-    address owner,
-    address spender,
-    uint256 value,
-    uint256 deadline,
-    uint8 v,
-    bytes32 r,
-    bytes32 s
-  ) external;
-}
+import {LedgerLike, WrappedErc20Like} from './interfaces/Common.sol';
 
 contract Asset is Manageable {
+  /// @dev Reference to Ledger contract
   LedgerLike public immutable ledger;
-  Erc20Like public immutable asset;
-  uint256 public decimals;
+
+  /// @dev Reference to asset contract
+  WrappedErc20Like public immutable asset;
+
+  /// @dev Flag if the asset is wrapped
+  uint256 public wrapped;
 
   // --- errors
 
@@ -47,6 +23,12 @@ contract Asset is Manageable {
   /// @dev Throws when transfer is filed
   error TransferFiled(address src, address dest, address asset, uint256 value);
 
+  /// @dev Throws when called wrapped associated function on the non-wrapped asset
+  error NonWrappedAsset();
+
+  /// @dev Throws when invalid value provided
+  error InvalidValue();
+
   // --- events
 
   /// @dev Emitted when asset joined
@@ -55,12 +37,16 @@ contract Asset is Manageable {
   /// @dev Emitted when asset has been withdrawn
   event Exit(address dest, uint256 value);
 
-  constructor(address _win, address _asset) {
+  constructor(
+    address _ledger,
+    address _asset,
+    uint256 _wrapped
+  ) {
     auth[msg.sender] = 1;
     live = 1;
-    ledger = LedgerLike(_win);
-    asset = Erc20Like(_asset);
-    decimals = asset.decimals();
+    ledger = LedgerLike(_ledger);
+    wrapped = _wrapped;
+    asset = WrappedErc20Like(_asset);
     emit Rely(msg.sender);
   }
 
@@ -118,6 +104,20 @@ contract Asset is Manageable {
       permit.s
     );
     _join(src, dest, value);
+  }
+
+  /// @dev Joins ERC20 compatible assets directly from sender
+  /// @param dest Asset destination address (balance owner)
+  /// @param value Asset value
+  function joinWrapped(address dest, uint256 value) external payable {
+    if (wrapped == 0) {
+      revert NonWrappedAsset();
+    }
+    if (msg.value != value) {
+      revert InvalidValue();
+    }
+    asset.deposit();
+    _join(address(this), dest, value);
   }
 
   /// @dev Withdraws funds
