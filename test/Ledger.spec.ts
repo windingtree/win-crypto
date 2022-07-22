@@ -1,36 +1,11 @@
-import { ethers, getNamedAccounts, deployments, getUnnamedAccounts } from 'hardhat';
-
-import { setupUser, setupUsers } from './utils';
-
-import { MockERC20, MockWrappedERC20, Asset, Ledger } from '../typechain';
 import { expect } from './chai-setup';
 import { utils, constants } from 'ethers';
-
-const setup = deployments.createFixture(async () => {
-  await deployments.fixture('Ledger');
-  const { deployer, alice, bob, carol } = await getNamedAccounts();
-  const contracts = {
-    erc20: await ethers.getContract<MockERC20>('MockERC20'),
-    wrappedErc20: await ethers.getContract<MockWrappedERC20>('MockWrappedERC20'),
-    ledger: await ethers.getContract<Ledger>('Ledger'),
-    asset: await ethers.getContract<Asset>('Asset'),
-    wrappedAsset: await ethers.getContract<Asset>('WrappedAsset')
-  };
-  const users = await setupUsers(await getUnnamedAccounts(), contracts);
-
-  return {
-    users,
-    deployer: await setupUser(deployer, contracts),
-    alice: await setupUser(alice, contracts),
-    bob: await setupUser(bob, contracts),
-    ...contracts
-  };
-});
+import { setup, AccountWithContract } from './utils/fixture';
 
 describe('Ledger', function () {
-  let alice: { address: string } & { ledger: Ledger };
-  let deployer: { address: string } & { ledger: Ledger };
-  let bob: { address: string } & { ledger: Ledger };
+  let alice: AccountWithContract;
+  let deployer: AccountWithContract;
+  let bob: AccountWithContract;
 
   beforeEach('load fixture', async () => {
     ({ deployer, alice, bob } = await setup());
