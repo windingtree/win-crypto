@@ -53,12 +53,6 @@
     "conventional-changelog-cli": "^2.2.2",
     "dotenv": "^16.0.1",
     "eslint": "^8.20.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-promise": "^6.0.0",
     "ethers": "^5.6.9",
     "git-cz": "^4.9.0",
     "hardhat": "^2.10.1",
@@ -82,6 +76,8 @@
     "docgen": "hardhat docgen",
     "test": "hardhat test",
     "commit": "git-cz -S",
-    "changelog": "conventional-changelog -p angular -r 2 -i CHANGELOG.md -s"
+    "changelog": "conventional-changelog -p angular -r 2 -i CHANGELOG.md -s",
+    "lint:ts": "npx eslint . --ext .ts",
+    "lint:sol": "npx solhint contracts/**/*.sol"
   }
 }
