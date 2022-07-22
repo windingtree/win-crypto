@@ -2,7 +2,7 @@ import { ethers, getNamedAccounts, deployments, getUnnamedAccounts } from 'hardh
 
 import { setupUser, setupUsers } from './utils';
 
-import { IERC20Metadata as IERC20 } from '../typechain';
+import { MockERC20 } from '../typechain';
 import { expect } from './chai-setup';
 import { utils } from 'ethers';
 
@@ -10,7 +10,7 @@ const setup = deployments.createFixture(async () => {
   await deployments.fixture('MockERC20');
   const { deployer, alice, bob, carol } = await getNamedAccounts();
   const contracts = {
-    erc20: (await ethers.getContract('MockERC20')) as IERC20
+    erc20: (await ethers.getContract<MockERC20>('MockERC20'))
   };
   const users = await setupUsers(await getUnnamedAccounts(), contracts);
 
@@ -25,10 +25,10 @@ const setup = deployments.createFixture(async () => {
 });
 
 describe('MockERC20', function () {
-  // let users: ({ address: string } & { erc20: IERC20 })[]
-  let alice: { address: string } & { erc20: IERC20 };
-  let bob: { address: string } & { erc20: IERC20 };
-  let carol: { address: string } & { erc20: IERC20 };
+  // let users: ({ address: string } & { erc20: MockERC20 })[]
+  let alice: { address: string } & { erc20: MockERC20 };
+  let bob: { address: string } & { erc20: MockERC20 };
+  let carol: { address: string } & { erc20: MockERC20 };
 
   beforeEach('load fixture', async () => {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi

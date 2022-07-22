@@ -21,11 +21,11 @@ contract Ledger is Manageable {
     address dest,
     address asset,
     int256 value
-  ) external authorized {
+  ) external onlyLive authorized {
     balances[dest][asset] = _add(balances[dest][asset], value);
   }
 
-  /// @dev Adds or subtract value of the asset
+  /// @dev Move balance from the source to destination
   /// @param src Balance owner address
   /// @param dest Destination address
   /// @param asset Asset contract address
@@ -35,7 +35,7 @@ contract Ledger is Manageable {
     address dest,
     address asset,
     uint256 value
-  ) external authorized {
+  ) external onlyLive authorized {
     balances[src][asset] = _add(balances[src][asset], -int256(value));
     balances[dest][asset] = _add(balances[dest][asset], int256(value));
   }

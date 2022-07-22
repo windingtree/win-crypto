@@ -68,6 +68,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   }
 
   const assetErc20Deploy = await deploy('Asset', {
+    contract: 'Asset',
     from: deployer,
     log: true,
     autoMine: true,
@@ -87,7 +88,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     );
   }
 
-  const assetWrappedErc20Deploy = await deploy('Asset', {
+  const assetWrappedErc20Deploy = await deploy('WrappedAsset', {
+    contract: 'Asset',
     from: deployer,
     log: true,
     autoMine: true,

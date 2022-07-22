@@ -40,7 +40,7 @@ abstract contract Manageable {
 
   /// @dev Checks is the contract live
   modifier onlyLive() {
-    if (live == 1) {
+    if (live == 0) {
       revert NotLive();
     }
     _;
