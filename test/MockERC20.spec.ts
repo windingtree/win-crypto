@@ -10,7 +10,7 @@ const setup = deployments.createFixture(async () => {
   await deployments.fixture('MockERC20');
   const { deployer, alice, bob, carol } = await getNamedAccounts();
   const contracts = {
-    erc20: (await ethers.getContract<MockERC20>('MockERC20'))
+    erc20: await ethers.getContract<MockERC20>('MockERC20')
   };
   const users = await setupUsers(await getUnnamedAccounts(), contracts);
 

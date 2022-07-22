@@ -10,7 +10,7 @@ const setup = deployments.createFixture(async () => {
   await deployments.fixture('MockWrappedERC20');
   const { deployer, alice, bob, carol } = await getNamedAccounts();
   const contracts = {
-    erc20: (await ethers.getContract<MockWrappedERC20>('MockWrappedERC20'))
+    erc20: await ethers.getContract<MockWrappedERC20>('MockWrappedERC20')
   };
   const users = await setupUsers(await getUnnamedAccounts(), contracts);
 
@@ -53,9 +53,7 @@ describe('MockWrappedERC20', function () {
       const receipt = await tx.wait();
       expect(await alice.erc20.balanceOf(alice.address)).to.be.eq(0);
       expect(await alice.erc20.provider.getBalance(alice.address)).to.be.eq(
-        balanceBefore
-          .add(value)
-          .sub(receipt.cumulativeGasUsed.mul(receipt.effectiveGasPrice))
+        balanceBefore.add(value).sub(receipt.cumulativeGasUsed.mul(receipt.effectiveGasPrice))
       );
     });
   });
