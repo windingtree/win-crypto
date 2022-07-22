@@ -52,6 +52,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     );
 
     const erc20Factory = await ethers.getContractFactory('MockWrappedERC20');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const wrappedErc20 = erc20Factory.attach(mockErc20Deploy.address) as MockWrappedERC20;
   }
 
