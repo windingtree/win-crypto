@@ -35,7 +35,7 @@ describe('Ledger', function () {
   });
 
   context('#add', () => {
-    it('should throw is not live', async () => {
+    it('should throw if not live', async () => {
       await deployer.ledger.toggle();
       await expect(deployer.ledger.add(deployer.address, alice.address, utils.parseEther('1'))).to.be.revertedWith(
         'NotLive()'
@@ -68,7 +68,7 @@ describe('Ledger', function () {
   });
 
   context('#move', () => {
-    it('should throw is not live', async () => {
+    it('should throw if not live', async () => {
       await deployer.ledger.toggle();
       await expect(
         deployer.ledger.move(deployer.address, alice.address, constants.AddressZero, utils.parseEther('1'))

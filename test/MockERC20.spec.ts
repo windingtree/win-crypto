@@ -11,14 +11,14 @@ describe('MockERC20', function () {
     ({ alice, bob, carol } = await setup());
   });
 
-  context('Metadata', async () => {
+  context('Metadata', () => {
     it('sets symbol correctly', async () => {
       expect(await alice.erc20.symbol()).to.be.eq('MTK');
       expect(await alice.erc20.name()).to.be.eq('MockERC20');
     });
   });
 
-  context('Allocations', async () => {
+  context('Allocations', () => {
     it('gives correct amount to alice', async () => {
       expect(await alice.erc20.balanceOf(alice.address)).to.be.eq(utils.parseEther('1000000'));
     });

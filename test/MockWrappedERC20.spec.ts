@@ -9,14 +9,14 @@ describe('MockWrappedERC20', function () {
     ({ alice } = await setup());
   });
 
-  context('Metadata', async () => {
+  context('Metadata', () => {
     it('sets symbol correctly', async () => {
       expect(await alice.wrappedErc20.symbol()).to.be.eq('WMTK');
       expect(await alice.wrappedErc20.name()).to.be.eq('MockWERC20');
     });
   });
 
-  context('Wrapping features', async () => {
+  context('Wrapping features', () => {
     it('should wrap native tokens', async () => {
       expect(await alice.wrappedErc20.balanceOf(alice.address)).to.be.eq(0);
       const value = utils.parseEther('1');
