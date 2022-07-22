@@ -25,7 +25,7 @@ contract MockWrappedERC20 is ERC20, ERC20Burnable, Pausable, AccessControl, ERC2
 
   function withdraw(uint256 wad) public payable {
     require(balanceOf(msg.sender) >= wad);
-    _burn(msg.sender, msg.value);
+    _burn(msg.sender, wad);
     address payable sender = payable(msg.sender);
     sender.transfer(wad);
     emit Withdrawal(msg.sender, wad);

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { MockERC20 } from '../typechain';
+import { MockERC20, MockWrappedERC20 } from '../typechain';
 import { ethers } from 'hardhat';
 import { utils } from 'ethers';
 
@@ -23,6 +23,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true,
     autoMine: true // speed up deployment on local network, no effect on live network.
   });
+  const mockWrappedErc20Deploy = await deploy('MockWrappedERC20', {
+    from: deployer,
+    log: true,
+    autoMine: true // speed up deployment on local network, no effect on live network.
+  });
 
   if (mockErc20Deploy.newlyDeployed) {
     console.log(
@@ -38,7 +43,16 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     await erc20.mint(bob, NUM_TOKENS);
     await erc20.mint(carol, NUM_TOKENS);
   }
+
+  if (mockWrappedErc20Deploy.newlyDeployed) {
+    console.log(
+      `Contract MockWrappedERC20 deployed at ${mockWrappedErc20Deploy.address} using ${mockWrappedErc20Deploy.receipt?.gasUsed} gas`
+    );
+
+    const erc20Factory = await ethers.getContractFactory('MockWrappedERC20');
+    const wrappedErc20 = erc20Factory.attach(mockErc20Deploy.address) as MockWrappedERC20;
+  }
 };
 
 export default func;
-func.tags = ['MockERC20'];
+func.tags = ['MockERC20', 'MockWrappedERC20'];
