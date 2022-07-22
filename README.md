@@ -64,6 +64,14 @@ Using known information the `provider` should call the `refund` function. If the
 
 >! Current version of the `WinPay` does not `unwrapping` wrapped funds during refunds and returns `wrapped` asset even if the `customer` made payment with native tokens.
 
+## Test node
+
+Local instances of contracts can be automatically deployed in the Hardhat environment using the following command:
+
+```bash
+yarn hardhat node
+```
+
 ## Commits
 
 To commit to the repository after staging the commit:
