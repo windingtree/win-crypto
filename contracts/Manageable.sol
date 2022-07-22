@@ -2,7 +2,6 @@
 pragma solidity ^0.8.13;
 
 abstract contract Manageable {
-
   /// @dev Active flag
   uint256 public live;
 

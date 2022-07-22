@@ -39,11 +39,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
     // mint tokens to each address
     const NUM_TOKENS = utils.parseEther('1000000');
-    await Promise.all([
-      alice,
-      bob,
-      carol
-    ].map(address => erc20.mint(address, NUM_TOKENS)));
+    await Promise.all([alice, bob, carol].map((address) => erc20.mint(address, NUM_TOKENS)));
   }
 
   if (mockWrappedErc20Deploy.newlyDeployed) {
@@ -63,9 +59,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
 
   if (ledgerDeploy.newlyDeployed) {
-    console.log(
-      `Contract Ledger deployed at ${ledgerDeploy.address} using ${ledgerDeploy.receipt?.gasUsed} gas`
-    );
+    console.log(`Contract Ledger deployed at ${ledgerDeploy.address} using ${ledgerDeploy.receipt?.gasUsed} gas`);
   }
 
   const assetErc20Deploy = await deploy('Asset', {
@@ -81,12 +75,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       `Contract Asset (erc20) deployed at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
     );
 
-    await execute(
-      'Ledger',
-      { from: deployer, log: true },
-      'rely',
-      assetErc20Deploy.address
-    );
+    await execute('Ledger', { from: deployer, log: true }, 'rely', assetErc20Deploy.address);
   }
 
   const assetWrappedErc20Deploy = await deploy('WrappedAsset', {
@@ -102,12 +91,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       `Contract Asset (wrappedErc20) deployed at ${assetWrappedErc20Deploy.address} using ${assetWrappedErc20Deploy.receipt?.gasUsed} gas`
     );
 
-    await execute(
-      'Ledger',
-      { from: deployer, log: true },
-      'rely',
-      assetWrappedErc20Deploy.address
-    );
+    await execute('Ledger', { from: deployer, log: true }, 'rely', assetWrappedErc20Deploy.address);
   }
 
   const winPayDeploy = await deploy('WinPay', {
@@ -118,9 +102,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
 
   if (winPayDeploy.newlyDeployed) {
-    console.log(
-      `Contract WinPay deployed at ${winPayDeploy.address} using ${winPayDeploy.receipt?.gasUsed} gas`
-    );
+    console.log(`Contract WinPay deployed at ${winPayDeploy.address} using ${winPayDeploy.receipt?.gasUsed} gas`);
   }
 };
 

@@ -208,12 +208,7 @@ contract WinPay is Manageable {
     dealStorage.state = State.REFUNDED;
 
     // take funds from the providers' account to the WinPay contract
-    ledger.move(
-      providers[dealStorage.provider],
-      address(this),
-      dealStorage.asset,
-      dealStorage.value
-    );
+    ledger.move(providers[dealStorage.provider], address(this), dealStorage.asset, dealStorage.value);
     // ...and send them to the customer
     AssetLike(asset).exit(dealStorage.customer, dealStorage.value);
 

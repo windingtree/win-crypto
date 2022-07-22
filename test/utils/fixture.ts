@@ -3,12 +3,12 @@ import { ethers, getNamedAccounts, deployments } from 'hardhat';
 import { setupUsers } from './';
 
 export type AccountWithContract = { address: string } & {
-  erc20: MockERC20,
-  wrappedErc20: MockWrappedERC20,
-  ledger: Ledger,
-  asset: Asset,
-  wrappedAsset: Asset,
-  winPay: WinPay
+  erc20: MockERC20;
+  wrappedErc20: MockWrappedERC20;
+  ledger: Ledger;
+  asset: Asset;
+  wrappedAsset: Asset;
+  winPay: WinPay;
 };
 
 export const setup = deployments.createFixture(async () => {
@@ -19,7 +19,7 @@ export const setup = deployments.createFixture(async () => {
     ledger: await ethers.getContract<Ledger>('Ledger'),
     asset: await ethers.getContract<Asset>('Asset'),
     wrappedAsset: await ethers.getContract<Asset>('WrappedAsset'),
-    winPay: await ethers.getContract<WinPay>('WinPay'),
+    winPay: await ethers.getContract<WinPay>('WinPay')
   };
   const users = await setupUsers(await getNamedAccounts(), contracts);
   return {

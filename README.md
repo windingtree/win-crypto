@@ -1,4 +1,5 @@
 # WinPay
+
 Win.so crypto payments manager contract
 
 ## Overview
@@ -62,7 +63,7 @@ To refund funds he has to know:
 
 Using known information the `provider` should call the `refund` function. If the deal associated with given service Id exists and other conditions are fulfilled the deal will be transferred to the `REFUNDED` state and funds will be returned to the `customer` account.
 
->! Current version of the `WinPay` does not `unwrapping` wrapped funds during refunds and returns `wrapped` asset even if the `customer` made payment with native tokens.
+> ! Current version of the `WinPay` does not `unwrapping` wrapped funds during refunds and returns `wrapped` asset even if the `customer` made payment with native tokens.
 
 ## Test node
 

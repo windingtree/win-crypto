@@ -94,15 +94,7 @@ contract Asset is Manageable {
     uint256 value,
     Permit.EIP2612Permit calldata permit
   ) external onlyLive {
-    asset.permit(
-      src,
-      address(this),
-      value,
-      permit.deadline,
-      permit.v,
-      permit.r,
-      permit.s
-    );
+    asset.permit(src, address(this), value, permit.deadline, permit.v, permit.r, permit.s);
     _join(src, dest, value);
   }
 

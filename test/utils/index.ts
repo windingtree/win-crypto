@@ -10,7 +10,7 @@ export type NamedAccounts = 'deployer' | 'alice' | 'bob' | 'carol';
  * @returns an array of users with their connected contracts
  */
 export async function setupUsers<T extends { [contractName: string]: Contract }>(
-  accounts: { [name: string]: string; },
+  accounts: { [name: string]: string },
   contracts: T
 ): Promise<Record<NamedAccounts, { address: string } & T>> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
