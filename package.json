@@ -78,6 +78,7 @@
     "commit": "git-cz -S",
     "changelog": "conventional-changelog -p angular -r 2 -i CHANGELOG.md -s",
     "lint:ts": "npx eslint . --ext .ts",
-    "lint:sol": "npx solhint contracts/**/*.sol"
+    "lint:sol": "npx solhint contracts/**/*.sol",
+    "coverage": "npx hardhat coverage"
   }
 }
