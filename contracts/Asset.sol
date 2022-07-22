@@ -54,12 +54,12 @@ contract Asset is Manageable {
     address src,
     address dest,
     uint256 value
-  ) internal onlyLive {
-    if (int256(value) >= 0) {
+  ) internal {
+    if (int256(value) < 0) {
       revert UintOverflow();
     }
     ledger.add(dest, address(asset), int256(value));
-    if (asset.transferFrom(src, address(this), value)) {
+    if (!asset.transferFrom(src, address(this), value)) {
       revert TransferFiled(src, dest, address(asset), value);
     }
     emit Join(dest, value);
@@ -68,7 +68,7 @@ contract Asset is Manageable {
   /// @dev Joins ERC20 compatible assets directly from sender
   /// @param dest Asset destination address (balance owner)
   /// @param value Asset value
-  function join(address dest, uint256 value) external {
+  function join(address dest, uint256 value) external onlyLive {
     _join(msg.sender, dest, value);
   }
 
@@ -80,7 +80,7 @@ contract Asset is Manageable {
     address src,
     address dest,
     uint256 value
-  ) external {
+  ) external onlyLive {
     _join(src, dest, value);
   }
 
@@ -93,9 +93,9 @@ contract Asset is Manageable {
     address dest,
     uint256 value,
     Permit.EIP2612Permit calldata permit
-  ) external {
+  ) external onlyLive {
     asset.permit(
-      msg.sender,
+      src,
       address(this),
       value,
       permit.deadline,
@@ -109,7 +109,7 @@ contract Asset is Manageable {
   /// @dev Joins ERC20 compatible assets directly from sender
   /// @param dest Asset destination address (balance owner)
   /// @param value Asset value
-  function joinWrapped(address dest, uint256 value) external payable {
+  function joinWrapped(address dest, uint256 value) external payable onlyLive {
     if (wrapped == 0) {
       revert NonWrappedAsset();
     }
@@ -123,7 +123,7 @@ contract Asset is Manageable {
   /// @dev Withdraws funds
   /// @param dest Asset destination address (balance owner)
   /// @param value Asset value
-  function exit(address dest, uint256 value) external {
+  function exit(address dest, uint256 value) external onlyLive {
     if (value <= 2**255) {
       revert UintOverflow();
     }
