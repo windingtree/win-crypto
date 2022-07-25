@@ -7,6 +7,7 @@ describe('Asset', function () {
   let alice: AccountWithContract;
   let deployer: AccountWithContract;
   let bob: AccountWithContract;
+  const value = utils.parseEther('1');
 
   beforeEach('load fixture', async () => {
     ({ deployer, alice, bob } = await setup());
@@ -38,23 +39,29 @@ describe('Asset', function () {
   context('#join(address,uint256)', () => {
     it('should throw if not live', async () => {
       await deployer.asset.toggle();
-      await expect(deployer.asset['join(address,uint256)'](deployer.address, utils.parseEther('1'))).to.be.revertedWith(
-        'NotLive()'
-      );
+      await expect(deployer.asset['join(address,uint256)'](deployer.address, value)).to.be.revertedWith('NotLive()');
     });
+
     it('should throw if sender does not allowed tokens', async () => {
-      await expect(deployer.asset['join(address,uint256)'](deployer.address, utils.parseEther('1'))).to.be.revertedWith(
+      await expect(deployer.asset['join(address,uint256)'](deployer.address, value)).to.be.revertedWith(
         'ERC20: insufficient allowance'
       );
     });
+
     it('should throw if sender does not have approved amount of tokens', async () => {
-      await deployer.erc20.approve(deployer.asset.address, utils.parseEther('1'));
-      await expect(deployer.asset['join(address,uint256)'](deployer.address, utils.parseEther('1'))).to.be.revertedWith(
+      await deployer.erc20.approve(deployer.asset.address, value);
+      await expect(deployer.asset['join(address,uint256)'](deployer.address, value)).to.be.revertedWith(
         'ERC20: transfer amount exceeds balance'
       );
     });
+
+    it('should throw if provided overflow value', async () => {
+      await expect(deployer.asset['join(address,uint256)'](deployer.address, constants.MaxUint256)).to.be.revertedWith(
+        'UintOverflow()'
+      );
+    });
+
     it('should join tokens', async () => {
-      const value = utils.parseEther('1');
       const balanceBefore = await alice.erc20.balanceOf(alice.asset.address);
       await alice.erc20.approve(alice.asset.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(0);
@@ -62,9 +69,7 @@ describe('Asset', function () {
         .to.emit(alice.asset, 'Join')
         .withArgs(alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(value);
-      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(balanceBefore.add(value));
     });
   });
 
@@ -72,22 +77,24 @@ describe('Asset', function () {
     it('should throw if not live', async () => {
       await deployer.asset.toggle();
       await expect(
-        deployer.asset['join(address,address,uint256)'](alice.address, alice.address, utils.parseEther('1'))
+        deployer.asset['join(address,address,uint256)'](alice.address, alice.address, value)
       ).to.be.revertedWith('NotLive()');
     });
+
     it('should throw if src does not allowed tokens', async () => {
       await expect(
-        deployer.asset['join(address,address,uint256)'](alice.address, alice.address, utils.parseEther('1'))
+        deployer.asset['join(address,address,uint256)'](alice.address, alice.address, value)
       ).to.be.revertedWith('ERC20: insufficient allowance');
     });
+
     it('should throw if sender does not have approved amount of tokens', async () => {
-      await deployer.erc20.approve(deployer.asset.address, utils.parseEther('1'));
+      await deployer.erc20.approve(deployer.asset.address, value);
       await expect(
-        deployer.asset['join(address,address,uint256)'](deployer.address, alice.address, utils.parseEther('1'))
+        deployer.asset['join(address,address,uint256)'](deployer.address, alice.address, value)
       ).to.be.revertedWith('ERC20: transfer amount exceeds balance');
     });
+
     it('should join tokens', async () => {
-      const value = utils.parseEther('1');
       const balanceBefore = await alice.erc20.balanceOf(alice.asset.address);
       await alice.erc20.approve(alice.asset.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(0);
@@ -95,9 +102,7 @@ describe('Asset', function () {
         .to.emit(alice.asset, 'Join')
         .withArgs(alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(value);
-      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(balanceBefore.add(value));
     });
   });
 
@@ -108,7 +113,7 @@ describe('Asset', function () {
         deployer.asset['join(address,address,uint256,(address,uint256,uint8,bytes32,bytes32))'](
           deployer.address,
           alice.address,
-          utils.parseEther('1'),
+          value,
           {
             owner: constants.AddressZero,
             deadline: 0,
@@ -119,10 +124,10 @@ describe('Asset', function () {
         )
       ).to.be.revertedWith('NotLive()');
     });
+
     it('should join tokens', async () => {
-      const value = utils.parseEther('1');
       const balanceBefore = await alice.erc20.balanceOf(alice.asset.address);
-      expect(await alice.ledger.balances(alice.address, alice.wrappedErc20.address)).to.be.eq(0);
+      expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(0);
       const deadline = (await alice.erc20.provider.getBlock('latest')).timestamp + 10000;
 
       const { v, r, s } = await createPermitSignature(
@@ -151,9 +156,7 @@ describe('Asset', function () {
         .to.emit(alice.asset, 'Join')
         .withArgs(alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(value);
-      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(balanceBefore.add(value));
     });
   });
 
@@ -161,85 +164,65 @@ describe('Asset', function () {
     it('should throw if not live', async () => {
       await deployer.wrappedAsset.toggle();
       await expect(
-        deployer.wrappedAsset.joinWrapped(deployer.address, utils.parseEther('1'), {
-          value: utils.parseEther('1')
+        deployer.wrappedAsset.joinWrapped(deployer.address, value, {
+          value: value
         })
       ).to.be.revertedWith('NotLive()');
     });
 
     it('should throw if called on non-wrapped asset', async () => {
       await expect(
-        deployer.asset.joinWrapped(deployer.address, utils.parseEther('1'), {
-          value: utils.parseEther('1')
+        deployer.asset.joinWrapped(deployer.address, value, {
+          value: value
         })
       ).to.be.revertedWith('NonWrappedAsset()');
     });
 
     it('should throw if no native value has been sent', async () => {
-      await expect(
-        deployer.wrappedAsset.joinWrapped(deployer.address, utils.parseEther('1'))
-      ).to.be.revertedWith('InvalidValue()');
+      await expect(deployer.wrappedAsset.joinWrapped(deployer.address, value)).to.be.revertedWith('InvalidValue()');
     });
 
     it('should wrap and join asset', async () => {
-      const value = utils.parseEther('1');
       const balanceBefore = await deployer.wrappedErc20.balanceOf(deployer.wrappedAsset.address);
       expect(await deployer.ledger.balances(deployer.address, deployer.wrappedErc20.address)).to.be.eq(0);
       await expect(
-        deployer.wrappedAsset.joinWrapped(
-          deployer.address,
-          value,
-          {
-            value
-          }
-        )
-      ).to
-        .emit(deployer.wrappedAsset, 'Join')
+        deployer.wrappedAsset.joinWrapped(deployer.address, value, {
+          value
+        })
+      )
+        .to.emit(deployer.wrappedAsset, 'Join')
         .withArgs(deployer.address, value)
         .emit(deployer.wrappedErc20, 'Deposit')
         .withArgs(deployer.wrappedAsset.address, value);
       expect(await deployer.ledger.balances(deployer.address, deployer.wrappedErc20.address)).to.be.eq(value);
-      expect(await deployer.wrappedErc20.balanceOf(deployer.wrappedAsset.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await deployer.wrappedErc20.balanceOf(deployer.wrappedAsset.address)).to.eq(balanceBefore.add(value));
     });
   });
 
   context('#exit(address,uint256)', () => {
     it('should throw if not live', async () => {
       await deployer.asset.toggle();
-      await expect(
-        deployer.asset.exit(deployer.address, utils.parseEther('1'))
-      ).to.be.revertedWith('NotLive()');
+      await expect(deployer.asset.exit(deployer.address, value)).to.be.revertedWith('NotLive()');
     });
 
     it('should throw if provided overflow value', async () => {
-      await expect(
-        deployer.asset.exit(deployer.address, constants.MaxUint256)
-      ).to.be.revertedWith('UintOverflow()');
+      await expect(deployer.asset.exit(deployer.address, constants.MaxUint256)).to.be.revertedWith('UintOverflow()');
     });
 
     it('should throw if balance is empty', async () => {
-      await expect(
-        deployer.asset.exit(deployer.address, utils.parseEther('1'))
-      ).to.be.reverted;
+      await expect(deployer.asset.exit(deployer.address, value)).to.be.reverted;
     });
 
     it('should exit funds', async () => {
-      const value = utils.parseEther('1');
       await alice.erc20.approve(alice.asset.address, value);
       await alice.asset['join(address,uint256)'](alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(value);
       expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(value);
       const balanceBefore = await alice.erc20.balanceOf(alice.address);
-      await expect(alice.asset.exit(alice.address, value))
-        .to.emit(alice.asset, 'Exit')
-        .withArgs(alice.address, value);
+      await expect(alice.asset.exit(alice.address, value)).to.emit(alice.asset, 'Exit').withArgs(alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(0);
       expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(0);
-      expect(await alice.erc20.balanceOf(alice.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await alice.erc20.balanceOf(alice.address)).to.eq(balanceBefore.add(value));
     });
   });
 });
