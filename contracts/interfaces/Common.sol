@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import {Permit} from '../libraries/Permit.sol';
 
 interface LedgerLike {
-  function balances(address dest, address asset) external returns (uint256);
+  function balances(address dst, address asset) external returns (uint256);
 
   function add(
     address,
@@ -14,7 +14,7 @@ interface LedgerLike {
 
   function move(
     address src,
-    address dest,
+    address dst,
     address asset,
     uint256 value
   ) external;
@@ -43,7 +43,7 @@ interface Erc20Like {
 }
 
 interface WrappedErc20Like is Erc20Like {
-  function deposit() external;
+  function deposit() external payable;
 
   function withdraw(uint256 wad) external;
 }
@@ -55,20 +55,22 @@ interface AssetLike {
 
   function wrapped() external returns (uint256);
 
-  function join(address dest, uint256 value) external;
+  function join(address dst, uint256 value) external;
 
   function join(
     address src,
-    address dest,
+    address dst,
     uint256 value
   ) external;
 
   function join(
     address src,
-    address dest,
+    address dst,
     uint256 value,
     Permit.EIP2612Permit memory permit
   ) external;
 
-  function exit(address dest, uint256 value) external;
+  function joinWrapped(address dst, uint256 value) external payable;
+
+  function exit(address dst, uint256 value) external;
 }

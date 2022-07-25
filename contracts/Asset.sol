@@ -21,7 +21,7 @@ contract Asset is Manageable {
   error UintOverflow();
 
   /// @dev Throws when transfer is filed
-  error TransferFiled(address src, address dest, address asset, uint256 value);
+  error TransferFiled(address src, address dst, address asset, uint256 value);
 
   /// @dev Throws when called wrapped associated function on the non-wrapped asset
   error NonWrappedAsset();
@@ -35,7 +35,7 @@ contract Asset is Manageable {
   event Join(address src, uint256 value);
 
   /// @dev Emitted when asset has been withdrawn
-  event Exit(address dest, uint256 value);
+  event Exit(address dst, uint256 value);
 
   constructor(
     address _ledger,
@@ -52,77 +52,87 @@ contract Asset is Manageable {
 
   function _join(
     address src,
-    address dest,
+    address dst,
     uint256 value
   ) internal {
     if (int256(value) < 0) {
       revert UintOverflow();
     }
-    ledger.add(dest, address(asset), int256(value));
-    if (!asset.transferFrom(src, address(this), value)) {
-      revert TransferFiled(src, dest, address(asset), value);
+    ledger.add(dst, address(asset), int256(value));
+    if (src != address(this)) {
+      if (!asset.transferFrom(src, address(this), value)) {
+        revert TransferFiled(src, dst, address(asset), value);
+      }
     }
-    emit Join(dest, value);
+    emit Join(dst, value);
   }
 
   /// @dev Joins ERC20 compatible assets directly from sender
-  /// @param dest Asset destination address (balance owner)
+  /// @param dst Asset destination address (balance owner)
   /// @param value Asset value
-  function join(address dest, uint256 value) external onlyLive {
-    _join(msg.sender, dest, value);
+  function join(address dst, uint256 value) external onlyLive {
+    _join(msg.sender, dst, value);
   }
 
   /// @dev Joins ERC20 compatible assets directly from known address
   /// @param src Asset owner address
-  /// @param dest Asset destination address (balance owner)
+  /// @param dst Asset destination address (balance owner)
   /// @param value Asset value
   function join(
     address src,
-    address dest,
+    address dst,
     uint256 value
   ) external onlyLive {
-    _join(src, dest, value);
+    _join(src, dst, value);
   }
 
   /// @dev Joins ERC20 compatible assets directly from known address with permit
   /// @param src Asset owner address
-  /// @param dest Asset destination address (balance owner)
+  /// @param dst Asset destination address (balance owner)
   /// @param value Asset value
   function join(
     address src,
-    address dest,
+    address dst,
     uint256 value,
     Permit.EIP2612Permit calldata permit
   ) external onlyLive {
-    asset.permit(src, address(this), value, permit.deadline, permit.v, permit.r, permit.s);
-    _join(src, dest, value);
+    asset.permit(
+      src,
+      address(this),
+      value,
+      permit.deadline,
+      permit.v,
+      permit.r,
+      permit.s
+    );
+    _join(src, dst, value);
   }
 
   /// @dev Joins ERC20 compatible assets directly from sender
-  /// @param dest Asset destination address (balance owner)
+  /// @param dst Asset destination address (balance owner)
   /// @param value Asset value
-  function joinWrapped(address dest, uint256 value) external payable onlyLive {
+  function joinWrapped(address dst, uint256 value) external payable onlyLive {
     if (wrapped == 0) {
       revert NonWrappedAsset();
     }
     if (msg.value != value) {
       revert InvalidValue();
     }
-    asset.deposit();
-    _join(address(this), dest, value);
+    asset.deposit{ value: msg.value }();
+    _join(address(this), dst, value);
   }
 
   /// @dev Withdraws funds
-  /// @param dest Asset destination address (balance owner)
+  /// @param dst Asset destination address (balance owner)
   /// @param value Asset value
-  function exit(address dest, uint256 value) external onlyLive {
-    if (value <= 2**255) {
+  function exit(address dst, uint256 value) external onlyLive {
+    if (value > 2**255) {
       revert UintOverflow();
     }
     ledger.add(msg.sender, address(asset), -int256(value));
-    if (asset.transfer(dest, value)) {
-      revert TransferFiled(address(this), dest, address(asset), value);
+    if (!asset.transfer(dst, value)) {
+      revert TransferFiled(address(this), dst, address(asset), value);
     }
-    emit Exit(dest, value);
+    emit Exit(dst, value);
   }
 }
