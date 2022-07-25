@@ -103,6 +103,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   if (winPayDeploy.newlyDeployed) {
     console.log(`Contract WinPay deployed at ${winPayDeploy.address} using ${winPayDeploy.receipt?.gasUsed} gas`);
+
+    await execute('Ledger', { from: deployer, log: true }, 'rely', winPayDeploy.address);
   }
 };
 
