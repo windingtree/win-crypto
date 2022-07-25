@@ -62,9 +62,7 @@ describe('Asset', function () {
         .to.emit(alice.asset, 'Join')
         .withArgs(alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(value);
-      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(balanceBefore.add(value));
     });
   });
 
@@ -95,9 +93,7 @@ describe('Asset', function () {
         .to.emit(alice.asset, 'Join')
         .withArgs(alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(value);
-      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(balanceBefore.add(value));
     });
   });
 
@@ -151,9 +147,7 @@ describe('Asset', function () {
         .to.emit(alice.asset, 'Join')
         .withArgs(alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(value);
-      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(balanceBefore.add(value));
     });
   });
 
@@ -176,9 +170,9 @@ describe('Asset', function () {
     });
 
     it('should throw if no native value has been sent', async () => {
-      await expect(
-        deployer.wrappedAsset.joinWrapped(deployer.address, utils.parseEther('1'))
-      ).to.be.revertedWith('InvalidValue()');
+      await expect(deployer.wrappedAsset.joinWrapped(deployer.address, utils.parseEther('1'))).to.be.revertedWith(
+        'InvalidValue()'
+      );
     });
 
     it('should wrap and join asset', async () => {
@@ -186,43 +180,31 @@ describe('Asset', function () {
       const balanceBefore = await deployer.wrappedErc20.balanceOf(deployer.wrappedAsset.address);
       expect(await deployer.ledger.balances(deployer.address, deployer.wrappedErc20.address)).to.be.eq(0);
       await expect(
-        deployer.wrappedAsset.joinWrapped(
-          deployer.address,
-          value,
-          {
-            value
-          }
-        )
-      ).to
-        .emit(deployer.wrappedAsset, 'Join')
+        deployer.wrappedAsset.joinWrapped(deployer.address, value, {
+          value
+        })
+      )
+        .to.emit(deployer.wrappedAsset, 'Join')
         .withArgs(deployer.address, value)
         .emit(deployer.wrappedErc20, 'Deposit')
         .withArgs(deployer.wrappedAsset.address, value);
       expect(await deployer.ledger.balances(deployer.address, deployer.wrappedErc20.address)).to.be.eq(value);
-      expect(await deployer.wrappedErc20.balanceOf(deployer.wrappedAsset.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await deployer.wrappedErc20.balanceOf(deployer.wrappedAsset.address)).to.eq(balanceBefore.add(value));
     });
   });
 
   context('#exit(address,uint256)', () => {
     it('should throw if not live', async () => {
       await deployer.asset.toggle();
-      await expect(
-        deployer.asset.exit(deployer.address, utils.parseEther('1'))
-      ).to.be.revertedWith('NotLive()');
+      await expect(deployer.asset.exit(deployer.address, utils.parseEther('1'))).to.be.revertedWith('NotLive()');
     });
 
     it('should throw if provided overflow value', async () => {
-      await expect(
-        deployer.asset.exit(deployer.address, constants.MaxUint256)
-      ).to.be.revertedWith('UintOverflow()');
+      await expect(deployer.asset.exit(deployer.address, constants.MaxUint256)).to.be.revertedWith('UintOverflow()');
     });
 
     it('should throw if balance is empty', async () => {
-      await expect(
-        deployer.asset.exit(deployer.address, utils.parseEther('1'))
-      ).to.be.reverted;
+      await expect(deployer.asset.exit(deployer.address, utils.parseEther('1'))).to.be.reverted;
     });
 
     it('should exit funds', async () => {
@@ -232,14 +214,10 @@ describe('Asset', function () {
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(value);
       expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(value);
       const balanceBefore = await alice.erc20.balanceOf(alice.address);
-      await expect(alice.asset.exit(alice.address, value))
-        .to.emit(alice.asset, 'Exit')
-        .withArgs(alice.address, value);
+      await expect(alice.asset.exit(alice.address, value)).to.emit(alice.asset, 'Exit').withArgs(alice.address, value);
       expect(await alice.ledger.balances(alice.address, alice.erc20.address)).to.be.eq(0);
       expect(await alice.erc20.balanceOf(alice.asset.address)).to.eq(0);
-      expect(await alice.erc20.balanceOf(alice.address)).to.eq(
-        balanceBefore.add(value)
-      );
+      expect(await alice.erc20.balanceOf(alice.address)).to.eq(balanceBefore.add(value));
     });
   });
 });
