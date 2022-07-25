@@ -32,7 +32,7 @@ contract WinPay is Manageable {
   // -- errors
 
   /// @dev Throws when provider is already registered
-  error ProviderExists(bytes32 provider);
+  error ProviderExists();
 
   /// @dev Throws when provider not found
   error ProviderNotFound(bytes32 provider);
@@ -76,9 +76,9 @@ contract WinPay is Manageable {
   /// @dev Register a new provider
   /// @param provider Unique provider Id
   /// @param wallet Provider's wallet
-  function register(bytes32 provider, address wallet) external {
+  function register(bytes32 provider, address wallet) external onlyLive {
     if (providers[provider] != address(0)) {
-      revert ProviderExists(provider);
+      revert ProviderExists();
     }
     providers[provider] = wallet;
     emit Provider(provider, wallet);
@@ -87,7 +87,7 @@ contract WinPay is Manageable {
   /// @dev Update the provider
   /// @param provider Unique provider Id
   /// @param wallet Provider's wallet
-  function updateProvider(bytes32 provider, address wallet) external {
+  function updateProvider(bytes32 provider, address wallet) external onlyLive {
     if (msg.sender != providers[provider]) {
       revert NotAuthorized();
     }
@@ -124,7 +124,7 @@ contract WinPay is Manageable {
     }
 
     // make sure the deal is not expired
-    if (expiry >= block.timestamp) {
+    if (expiry < block.timestamp) {
       revert DealExpired(serviceId, expiry);
     }
 
@@ -136,8 +136,7 @@ contract WinPay is Manageable {
       if (msg.value != value) {
         revert InvalidValue();
       }
-      WrappedErc20Like(assetAddress).deposit();
-      assetInstance.join(address(this), providers[provider], value);
+      assetInstance.joinWrapped{ value: msg.value }(providers[provider], value);
     } else if (permit.owner != address(0)) {
       // we have a permission from the customer, so, use it
       assetInstance.join(msg.sender, providers[provider], value, permit);
@@ -162,7 +161,7 @@ contract WinPay is Manageable {
     uint256 expiry,
     address asset,
     uint256 value
-  ) external onlyLive {
+  ) external payable onlyLive {
     _deal(provider, serviceId, expiry, asset, value, Permit.EIP2612Permit(address(0), 0, 0, bytes32(0), bytes32(0)));
   }
 
@@ -200,7 +199,7 @@ contract WinPay is Manageable {
     }
 
     // check provider's balance
-    if (ledger.balances(providers[dealStorage.provider], dealStorage.asset) >= dealStorage.value) {
+    if (ledger.balances(providers[dealStorage.provider], dealStorage.asset) < dealStorage.value) {
       revert BalanceNotEnough();
     }
 
