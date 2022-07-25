@@ -136,7 +136,7 @@ contract WinPay is Manageable {
       if (msg.value != value) {
         revert InvalidValue();
       }
-      assetInstance.joinWrapped{ value: msg.value }(providers[provider], value);
+      assetInstance.joinWrapped{value: msg.value}(providers[provider], value);
     } else if (permit.owner != address(0)) {
       // we have a permission from the customer, so, use it
       assetInstance.join(msg.sender, providers[provider], value, permit);
