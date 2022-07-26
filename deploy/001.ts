@@ -5,7 +5,6 @@ import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  return;
   if (!['hardhat', 'ganache', 'localhost'].includes(network.name)) {
     return;
   }
