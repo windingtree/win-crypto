@@ -1,11 +1,15 @@
-/* eslint-disable camelcase */
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
 import { MockERC20, MockWrappedERC20 } from '../typechain';
-import { ethers } from 'hardhat';
+import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+
+  if (!['hardhat', 'ganache', 'localhost'].includes(network.name)) {
+    return;
+  }
+
   const { deployments, getNamedAccounts } = hre;
   const { deploy, execute } = deployments;
 
@@ -109,4 +113,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 };
 
 export default func;
-func.tags = ['MockERC20', 'MockWrappedERC20', 'Ledger', 'Asset', 'WinPay'];
+func.tags = ['local'];
