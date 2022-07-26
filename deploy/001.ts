@@ -5,7 +5,7 @@ import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-
+  return;
   if (!['hardhat', 'ganache', 'localhost'].includes(network.name)) {
     return;
   }
@@ -27,11 +27,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true,
     autoMine: true
   });
-  const mockWrappedErc20Deploy = await deploy('MockWrappedERC20', {
-    from: deployer,
-    log: true,
-    autoMine: true
-  });
 
   if (mockErc20Deploy.newlyDeployed) {
     console.log(
@@ -45,6 +40,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const NUM_TOKENS = utils.parseEther('1000000');
     await Promise.all([alice, bob, carol].map((address) => erc20.mint(address, NUM_TOKENS)));
   }
+
+  const mockWrappedErc20Deploy = await deploy('MockWrappedERC20', {
+    from: deployer,
+    log: true,
+    autoMine: true
+  });
 
   if (mockWrappedErc20Deploy.newlyDeployed) {
     console.log(
