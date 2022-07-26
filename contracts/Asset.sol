@@ -7,10 +7,10 @@ import {LedgerLike, WrappedErc20Like} from './interfaces/Common.sol';
 
 contract Asset is Manageable {
   /// @dev Reference to Ledger contract
-  LedgerLike public immutable ledger;
+  LedgerLike public ledger;
 
   /// @dev Reference to asset contract
-  WrappedErc20Like public immutable asset;
+  WrappedErc20Like public asset;
 
   /// @dev Flag if the asset is wrapped
   uint256 public wrapped;
@@ -127,4 +127,6 @@ contract Asset is Manageable {
     }
     emit Exit(dst, value);
   }
+
+  uint256[50] private __gap;
 }

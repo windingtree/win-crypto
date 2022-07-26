@@ -21,7 +21,7 @@ contract WinPay is Manageable {
   }
 
   /// @dev Reference to Ledger contract
-  LedgerLike public immutable ledger;
+  LedgerLike public ledger;
 
   /// @dev Service providers registry
   mapping(bytes32 => address) public providers; // provider => EOA
@@ -213,4 +213,6 @@ contract WinPay is Manageable {
 
     emit Refund(dealStorage.provider, serviceId);
   }
+
+  uint256[50] private __gap;
 }

@@ -68,4 +68,6 @@ abstract contract Manageable {
     auth[party] = 0;
     emit Deny(party);
   }
+
+  uint256[50] private __gap;
 }

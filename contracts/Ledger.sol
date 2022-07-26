@@ -48,4 +48,6 @@ contract Ledger is Manageable {
       require(y <= 0 || z >= x);
     }
   }
+
+  uint256[50] private __gap;
 }
