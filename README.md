@@ -26,8 +26,8 @@ flowchart TD
   ledger[Ledger]
   asset[Asset]
 
-  ledger -- authorized at -->  win
-  ledger -- authorized at -->  asset
+  win -- authorized at --> ledger
+  asset -- authorized at -->  ledger
 
   win -- joins assets to --> asset
   win -- updates balance --> ledger
