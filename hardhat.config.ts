@@ -61,46 +61,16 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       tags: ['local']
     },
-    staging: {
-      url: nodeUrl('rinkeby'),
-      accounts: accounts('rinkeby'),
-      tags: ['staging']
-    },
-    production: {
-      url: nodeUrl('mainnet'),
-      accounts: accounts('mainnet'),
-      tags: ['production']
-    },
-    mainnet: {
-      url: nodeUrl('mainnet'),
-      accounts: accounts('mainnet'),
-      tags: ['production']
-    },
-    rinkeby: {
-      url: nodeUrl('rinkeby'),
-      accounts: accounts('rinkeby'),
-      tags: ['staging']
-    },
-    kovan: {
-      url: nodeUrl('kovan'),
-      accounts: accounts('kovan'),
-      tags: ['staging']
-    },
-    goerli: {
-      url: nodeUrl('goerli'),
-      accounts: accounts('goerli'),
-      tags: ['staging']
-    },
     sokol: {
       url: nodeUrl('sokol'),
       accounts: accounts('sokol'),
       tags: ['staging']
     },
-    gnosis: {
-      url: nodeUrl('gnosis'),
-      accounts: accounts('gnosis'),
-      tags: ['production']
-    }
+    'polygon_mumbai': {
+      url: nodeUrl('polygon_mumbai'),
+      accounts: accounts('polygon_mumbai'),
+      tags: ['staging']
+    },
   },
   gasReporter: {
     currency: 'USD',
