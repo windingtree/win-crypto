@@ -66,11 +66,11 @@ const config: HardhatUserConfig = {
       accounts: accounts('sokol'),
       tags: ['staging']
     },
-    'polygon_mumbai': {
+    polygon_mumbai: {
       url: nodeUrl('polygon_mumbai'),
       accounts: accounts('polygon_mumbai'),
       tags: ['staging']
-    },
+    }
   },
   gasReporter: {
     currency: 'USD',

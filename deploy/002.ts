@@ -5,11 +5,9 @@ import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-
   if (!['sokol'].includes(network.name)) {
     return;
   }
-
 };
 
 export default func;
