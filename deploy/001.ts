@@ -113,4 +113,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 };
 
 export default func;
-func.tags = ['local'];
+func.tags = ['MockERC20', 'MockWrappedERC20', 'Ledger', 'Asset', 'WinPay'];
