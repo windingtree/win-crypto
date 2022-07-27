@@ -1,12 +1,15 @@
 {
   "name": "@windingtree/win-pay",
   "description": "Win.so crypto payments contract",
+  "publishConfig": {
+    "access": "public"
+  },
   "author": {
     "name": "Winding Tree Developers",
     "email": "dev@windingtree.com"
   },
   "license": "GPL-3.0-only",
-  "version": "0.0.1",
+  "version": "0.0.0-semantic-release",
   "homepage": "https://windingtree.com/",
   "keywords": [
     "windingtree",
@@ -20,11 +23,15 @@
     "type": "git",
     "url": "https://github.com/windingtree/win-pay"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "contracts/interfaces",
     "contracts/libraries",
     "artifacts/contracts/**/*.json",
-    "!artifacts/contracts/**/*.dbg.json"
+    "!artifacts/contracts/**/*.dbg.json",
+    "typechain",
+    "dist"
   ],
   "engines": {
     "node": ">=10"
@@ -34,6 +41,9 @@
     "@openzeppelin/contracts-upgradeable": "^4.7.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "conventional-changelog-cli": "^2.2.2",
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@nomiclabs/hardhat-solhint": "^2.0.1",
@@ -50,7 +60,6 @@
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "chai-ethers": "^0.0.1",
-    "conventional-changelog-cli": "^2.2.2",
     "dotenv": "^16.0.1",
     "eslint": "^8.20.0",
     "ethers": "^5.6.9",
@@ -63,6 +72,7 @@
     "mocha-chai-jest-snapshot": "^1.1.4",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0-dev.23",
+    "husky": "^8.0.1",
     "solc": "^0.8.15",
     "solhint": "^3.3.7",
     "solhint-plugin-prettier": "^0.0.5",
@@ -76,6 +86,9 @@
     "docgen": "hardhat docgen",
     "test": "hardhat test",
     "commit": "git-cz -S",
+    "clean": "rm -rf dist cache artifacts typechain",
+    "build": "yarn clean && yarn compile && yarn tsc -p tsconfig-build.json",
+    "prepare": "husky install",
     "changelog": "conventional-changelog -p angular -r 2 -i CHANGELOG.md -s",
     "lint:ts": "npx eslint . --ext .ts",
     "lint:sol": "npx solhint contracts/**/*.sol",
