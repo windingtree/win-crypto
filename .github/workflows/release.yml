@@ -31,7 +31,7 @@ jobs:
     - name: Install semantic-release extra plugins
       run: yarn add @semantic-release/changelog -D
     - name: Lint
-      run: yarn lint:ts --if-present && yarn lint:sol --if-present
+      run: yarn lint:ts && yarn lint:sol
     - name: Build
       run: yarn build
     - name: Test
