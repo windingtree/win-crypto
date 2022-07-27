@@ -42,7 +42,7 @@ jobs:
         key: deployments
 
     - name: Deploy to staging chain
-      run: yarn hardhat deploy --gasPrice 30000000000 --network sokol
+      run: yarn hardhat deploy --gasprice 30000000000 --network sokol
       env:
         MNEMONIC: ${{ secrets.MNEMONIC_SOKOL }}
         ETH_NODE_URI_SOKOL: ${{ secrets.ETH_NODE_URI_SOKOL }}
