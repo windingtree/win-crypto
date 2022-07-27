@@ -7,19 +7,20 @@
 # python for tools
 __pycache__
 .pytest_cache
-.venv/
+.venv
 
 # node
-node_modules/
+node_modules
 
 # hardhat / typechain artifacts
-artifacts/
-cache/
-typechain/
-reports/
+artifacts
+cache
+typechain
+reports
 coverage*
 inheritance-graph.dot
-docs/
+docs
+dist
 
 # dotenv
 .env*
