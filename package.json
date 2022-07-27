@@ -92,6 +92,7 @@
     "changelog": "conventional-changelog -p angular -r 2 -i CHANGELOG.md -s",
     "lint:ts": "npx eslint . --ext .ts",
     "lint:sol": "npx solhint contracts/**/*.sol",
-    "coverage": "npx hardhat coverage"
+    "coverage": "npx hardhat coverage",
+    "deploy:sokol": "yarn hardhat deploy --gasprice 50000000000 --network sokol && yarn hardhat sourcify --network sokol"
   }
 }

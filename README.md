@@ -73,6 +73,17 @@ Local instances of contracts can be automatically deployed in the Hardhat enviro
 yarn hardhat node
 ```
 
+## Deployments
+
+Staging environment: Sokol
+
+- `Ledger`: 0x3196f354b7a95413E30889D1C6cE5074b10c43f5
+- `WinPay`: 0x6f2fBD652A99Db4b8143c8383Ae39b5459268685
+- `MockERC20`: 0x0462C345320C7Ed3071cd1426e6B62472C5bA96d
+- `MockWERC20`: 0x63CD2DF580Df5509806A204090eDdCc6F3493Bf5
+- `Asset (MockERC20)`: 0x1C375919362730AC69c5ACffeC775F11c9b75cF2
+- `Asset (MockWERC20)`: 0x25149dE5afe2043C61687AD136527d2167EFC241
+-
 ## Commits
 
 To commit to the repository after staging the commit:

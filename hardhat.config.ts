@@ -65,7 +65,7 @@ const config: HardhatUserConfig = {
       url: nodeUrl('sokol'),
       accounts: accounts('sokol'),
       tags: ['staging'],
-      gasPrice: 30000000000
+      gasPrice: 50000000000
     },
     polygon_mumbai: {
       url: nodeUrl('polygon_mumbai'),

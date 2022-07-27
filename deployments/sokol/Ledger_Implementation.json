@@ -1,0 +1,413 @@
+{
+  "address": "0xb9cd3de3da2fffa9785c981618a858be9d6538f9",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "NotAuthorized",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotLive",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotUpgrader",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "party",
+          "type": "address"
+        }
+      ],
+      "name": "Deny",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "live",
+          "type": "uint256"
+        }
+      ],
+      "name": "Live",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "party",
+          "type": "address"
+        }
+      ],
+      "name": "Rely",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "dest",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "asset",
+          "type": "address"
+        },
+        {
+          "internalType": "int256",
+          "name": "value",
+          "type": "int256"
+        }
+      ],
+      "name": "add",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "auth",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "balances",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "party",
+          "type": "address"
+        }
+      ],
+      "name": "deny",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "live",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "src",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "dest",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "asset",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "move",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "postUpgrade",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "party",
+          "type": "address"
+        }
+      ],
+      "name": "rely",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "toggle",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "upgrader",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xb666858c6c55a475339be4cb2e431b02945330430b594f2ea0eafc0ee55765f3",
+  "receipt": {
+    "to": null,
+    "from": "0x2aae83d2e734fa7a586c1c981175dfab551fb512",
+    "contractAddress": "0xb9cd3de3da2fffa9785c981618a858be9d6538f9",
+    "transactionIndex": "0x0",
+    "gasUsed": "0x76953",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000080000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x961af47fe1a53c2e60364e0312b2aa283dd0da004a067474f1ac2a7c672d8a89",
+    "transactionHash": "0xb666858c6c55a475339be4cb2e431b02945330430b594f2ea0eafc0ee55765f3",
+    "logs": [
+      {
+        "removed": false,
+        "logIndex": "0x0",
+        "transactionIndex": "0x0",
+        "transactionHash": "0xb666858c6c55a475339be4cb2e431b02945330430b594f2ea0eafc0ee55765f3",
+        "blockHash": "0x961af47fe1a53c2e60364e0312b2aa283dd0da004a067474f1ac2a7c672d8a89",
+        "blockNumber": "0x19d9934",
+        "address": "0xb9cd3de3da2fffa9785c981618a858be9d6538f9",
+        "data": "0x0000000000000000000000002aae83d2e734fa7a586c1c981175dfab551fb512",
+        "topics": [
+          "0xdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a60"
+        ]
+      }
+    ],
+    "blockNumber": "0x19d9934",
+    "cumulativeGasUsed": "0x76953",
+    "status": "0x1"
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "faae9b97fd50560bf5ba95d48bc92eab",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"NotAuthorized\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotLive\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotUpgrader\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"party\",\"type\":\"address\"}],\"name\":\"Deny\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"live\",\"type\":\"uint256\"}],\"name\":\"Live\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"party\",\"type\":\"address\"}],\"name\":\"Rely\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dest\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"asset\",\"type\":\"address\"},{\"internalType\":\"int256\",\"name\":\"value\",\"type\":\"int256\"}],\"name\":\"add\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"auth\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"balances\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"party\",\"type\":\"address\"}],\"name\":\"deny\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"live\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dest\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"asset\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"move\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"postUpgrade\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"party\",\"type\":\"address\"}],\"name\":\"rely\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"toggle\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"upgrader\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"errors\":{\"NotAuthorized()\":[{\"details\":\"Throws when action is not authorized\"}],\"NotLive()\":[{\"details\":\"Throws if the contract called when it is not live\"}],\"NotUpgrader()\":[{\"details\":\"Throws when function called not by upgrader\"}]},\"kind\":\"dev\",\"methods\":{\"add(address,address,int256)\":{\"details\":\"Adds or subtract value of the asset\",\"params\":{\"asset\":\"Asset contract address\",\"dest\":\"Balance owner address\",\"value\":\"Asset value\"}},\"deny(address)\":{\"details\":\"Removes authorized party\"},\"move(address,address,address,uint256)\":{\"details\":\"Move balance from the source to destination\",\"params\":{\"asset\":\"Asset contract address\",\"dest\":\"Destination address\",\"src\":\"Balance owner address\",\"value\":\"Asset value\"}},\"rely(address)\":{\"details\":\"Adds authorized party\"},\"toggle()\":{\"details\":\"Toggles the contract live flag\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/upgradeable/LedgerUpgradeable.sol\":\"LedgerUpgradeable\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/Ledger.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nimport {Manageable} from './Manageable.sol';\\n\\ncontract Ledger is Manageable {\\n  /// @dev Balances\\n  mapping(address => mapping(address => uint256)) public balances; // EOA => asset address => balance\\n\\n  constructor() {\\n    auth[msg.sender] = 1;\\n    live = 1;\\n    emit Rely(msg.sender);\\n  }\\n\\n  /// @dev Adds or subtract value of the asset\\n  /// @param dest Balance owner address\\n  /// @param asset Asset contract address\\n  /// @param value Asset value\\n  function add(\\n    address dest,\\n    address asset,\\n    int256 value\\n  ) external onlyLive authorized {\\n    balances[dest][asset] = _add(balances[dest][asset], value);\\n  }\\n\\n  /// @dev Move balance from the source to destination\\n  /// @param src Balance owner address\\n  /// @param dest Destination address\\n  /// @param asset Asset contract address\\n  /// @param value Asset value\\n  function move(\\n    address src,\\n    address dest,\\n    address asset,\\n    uint256 value\\n  ) external onlyLive authorized {\\n    balances[src][asset] = _add(balances[src][asset], -int256(value));\\n    balances[dest][asset] = _add(balances[dest][asset], int256(value));\\n  }\\n\\n  // --- helpers\\n  function _add(uint256 x, int256 y) internal pure returns (uint256 z) {\\n    unchecked {\\n      z = x + uint256(y);\\n      require(y >= 0 || z <= x);\\n      require(y <= 0 || z >= x);\\n    }\\n  }\\n\\n  uint256[50] private __gap;\\n}\\n\",\"keccak256\":\"0x8def05260077ce405bc41c4d52b6637027aca338ee8550110be0b785264e713f\",\"license\":\"GPL-3.0-only\"},\"contracts/Manageable.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nabstract contract Manageable {\\n  /// @dev Active flag\\n  uint256 public live;\\n\\n  /// @dev Authorized parties\\n  mapping(address => uint256) public auth;\\n\\n  // -- errors\\n\\n  /// @dev Throws if the contract called when it is not live\\n  error NotLive();\\n\\n  /// @dev Throws when action is not authorized\\n  error NotAuthorized();\\n\\n  // -- events\\n\\n  /// @dev Emitted when the contract live flag is changed\\n  event Live(uint256 live);\\n\\n  /// @dev Emitted when a party is authorized\\n  event Rely(address party);\\n\\n  /// @dev Emitted when a party is denied\\n  event Deny(address party);\\n\\n  // --- modifiers\\n\\n  /// @dev Checks if the sender is authorized\\n  modifier authorized() {\\n    if (auth[msg.sender] != 1) {\\n      revert NotAuthorized();\\n    }\\n    _;\\n  }\\n\\n  /// @dev Checks is the contract live\\n  modifier onlyLive() {\\n    if (live == 0) {\\n      revert NotLive();\\n    }\\n    _;\\n  }\\n\\n  // --- admin\\n\\n  /// @dev Toggles the contract live flag\\n  function toggle() external authorized {\\n    if (live == 1) {\\n      live = 0;\\n    } else {\\n      live = 1;\\n    }\\n    emit Live(live);\\n  }\\n\\n  /// @dev Adds authorized party\\n  function rely(address party) external authorized {\\n    auth[party] = 1;\\n    emit Rely(party);\\n  }\\n\\n  /// @dev Removes authorized party\\n  function deny(address party) external authorized {\\n    auth[party] = 0;\\n    emit Deny(party);\\n  }\\n\\n  uint256[50] private __gap;\\n}\\n\",\"keccak256\":\"0xb90e97de9f804b5eb380e9dee4a419d55463f7760ccf9ee703d93776e290e4f4\",\"license\":\"GPL-3.0-only\"},\"contracts/upgradeable/LedgerUpgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nimport {Ledger} from '../Ledger.sol';\\nimport {Upgradeable} from './Upgradeable.sol';\\n\\ncontract LedgerUpgradeable is Upgradeable, Ledger {\\n  constructor() Ledger() {}\\n\\n  function postUpgrade() public onlyUpgrader {\\n    auth[msg.sender] = 1;\\n    live = 1;\\n    emit Rely(msg.sender);\\n  }\\n\\n  uint256[50] private __gap;\\n}\\n\",\"keccak256\":\"0xd271413b9b49d1a76196c20aa31aefc553a78d81e4017306fc0fecc1428ef843\",\"license\":\"GPL-3.0-only\"},\"contracts/upgradeable/Upgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nabstract contract Upgradeable {\\n  address public upgrader;\\n\\n  /// @dev Throws when function called not by upgrader\\n  error NotUpgrader();\\n\\n  /// @dev Checks is the caller is upgrader\\n  modifier onlyUpgrader() {\\n    if (upgrader == address(0)) {\\n      upgrader = msg.sender;\\n    }\\n    if (msg.sender != upgrader) {\\n      revert NotUpgrader();\\n    }\\n    _;\\n  }\\n\\n  uint256[50] private __gap;\\n}\\n\",\"keccak256\":\"0xd2af52add71b029d9a17e22cbac85e5b052de945fc42636e2802e10e6045b107\",\"license\":\"GPL-3.0-only\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b503360008181526034602090815260409182902060019081905560335590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a60910160405180910390a16106fc8061006c6000396000f3fe608060405234801561001057600080fd5b506004361061009e5760003560e01c80639c52a7f1116100665780639c52a7f1146100f7578063af2697451461010a578063b688566914610135578063c23f001f14610148578063cd5d21181461017357600080fd5b80632c53bc64146100a35780633d7417f8146100ad57806340a3d246146100c057806365fae35e146100c8578063957aa58c146100db575b600080fd5b6100ab610193565b005b6100ab6100bb3660046105c0565b610230565b6100ab610338565b6100ab6100d636600461060b565b6103b5565b6100e460335481565b6040519081526020015b60405180910390f35b6100ab61010536600461060b565b610439565b60005461011d906001600160a01b031681565b6040516001600160a01b0390911681526020016100ee565b6100ab61014336600461062d565b6104b5565b6100e4610156366004610669565b606760209081526000928352604080842090915290825290205481565b6100e461018136600461060b565b60346020526000908152604090205481565b6000546001600160a01b03166101b657600080546001600160a01b031916331790555b6000546001600160a01b031633146101e15760405163520ba28160e11b815260040160405180910390fd5b3360008181526034602090815260409182902060019081905560335590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a6091015b60405180910390a1565b6033546000036102535760405163baf13b3f60e01b815260040160405180910390fd5b336000908152603460205260409020546001146102835760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b038085166000908152606760209081526040808320938616835292905220546102bb906102b68361069c565b610569565b6001600160a01b038086166000908152606760208181526040808420888616808652908352818520969096559388168352908152828220938252929092529020546103069082610569565b6001600160a01b0393841660009081526067602090815260408083209590961682529390935292909120919091555050565b336000908152603460205260409020546001146103685760405163ea8e4eb560e01b815260040160405180910390fd5b60335460010361037c576000603355610382565b60016033555b7f6b00bc0a71d2071ceffc66d2746ca7c3b550c2d5115a690a8761f81f04e2cf8060335460405161022691815260200190565b336000908152603460205260409020546001146103e55760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b0381166000818152603460209081526040918290206001905590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a6091015b60405180910390a150565b336000908152603460205260409020546001146104695760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b03811660008181526034602090815260408083209290925590519182527f184450df2e323acec0ed3b5c7531b81f9b4cdef7914dfd4c0a4317416bb5251b910161042e565b6033546000036104d85760405163baf13b3f60e01b815260040160405180910390fd5b336000908152603460205260409020546001146105085760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b038084166000908152606760209081526040808320938616835292905220546105389082610569565b6001600160a01b03938416600090815260676020908152604080832095909616825293909352929091209190915550565b81810160008212158061057c5750828111155b61058557600080fd5b6000821315806105955750828110155b61059e57600080fd5b92915050565b80356001600160a01b03811681146105bb57600080fd5b919050565b600080600080608085870312156105d657600080fd5b6105df856105a4565b93506105ed602086016105a4565b92506105fb604086016105a4565b9396929550929360600135925050565b60006020828403121561061d57600080fd5b610626826105a4565b9392505050565b60008060006060848603121561064257600080fd5b61064b846105a4565b9250610659602085016105a4565b9150604084013590509250925092565b6000806040838503121561067c57600080fd5b610685836105a4565b9150610693602084016105a4565b90509250929050565b6000600160ff1b82016106bf57634e487b7160e01b600052601160045260246000fd5b506000039056fea26469706673582212209e9630ada512d87bb8dc9935bbff8cbce9af578c91474fa8233125f935d5221064736f6c634300080d0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061009e5760003560e01c80639c52a7f1116100665780639c52a7f1146100f7578063af2697451461010a578063b688566914610135578063c23f001f14610148578063cd5d21181461017357600080fd5b80632c53bc64146100a35780633d7417f8146100ad57806340a3d246146100c057806365fae35e146100c8578063957aa58c146100db575b600080fd5b6100ab610193565b005b6100ab6100bb3660046105c0565b610230565b6100ab610338565b6100ab6100d636600461060b565b6103b5565b6100e460335481565b6040519081526020015b60405180910390f35b6100ab61010536600461060b565b610439565b60005461011d906001600160a01b031681565b6040516001600160a01b0390911681526020016100ee565b6100ab61014336600461062d565b6104b5565b6100e4610156366004610669565b606760209081526000928352604080842090915290825290205481565b6100e461018136600461060b565b60346020526000908152604090205481565b6000546001600160a01b03166101b657600080546001600160a01b031916331790555b6000546001600160a01b031633146101e15760405163520ba28160e11b815260040160405180910390fd5b3360008181526034602090815260409182902060019081905560335590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a6091015b60405180910390a1565b6033546000036102535760405163baf13b3f60e01b815260040160405180910390fd5b336000908152603460205260409020546001146102835760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b038085166000908152606760209081526040808320938616835292905220546102bb906102b68361069c565b610569565b6001600160a01b038086166000908152606760208181526040808420888616808652908352818520969096559388168352908152828220938252929092529020546103069082610569565b6001600160a01b0393841660009081526067602090815260408083209590961682529390935292909120919091555050565b336000908152603460205260409020546001146103685760405163ea8e4eb560e01b815260040160405180910390fd5b60335460010361037c576000603355610382565b60016033555b7f6b00bc0a71d2071ceffc66d2746ca7c3b550c2d5115a690a8761f81f04e2cf8060335460405161022691815260200190565b336000908152603460205260409020546001146103e55760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b0381166000818152603460209081526040918290206001905590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a6091015b60405180910390a150565b336000908152603460205260409020546001146104695760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b03811660008181526034602090815260408083209290925590519182527f184450df2e323acec0ed3b5c7531b81f9b4cdef7914dfd4c0a4317416bb5251b910161042e565b6033546000036104d85760405163baf13b3f60e01b815260040160405180910390fd5b336000908152603460205260409020546001146105085760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b038084166000908152606760209081526040808320938616835292905220546105389082610569565b6001600160a01b03938416600090815260676020908152604080832095909616825293909352929091209190915550565b81810160008212158061057c5750828111155b61058557600080fd5b6000821315806105955750828110155b61059e57600080fd5b92915050565b80356001600160a01b03811681146105bb57600080fd5b919050565b600080600080608085870312156105d657600080fd5b6105df856105a4565b93506105ed602086016105a4565b92506105fb604086016105a4565b9396929550929360600135925050565b60006020828403121561061d57600080fd5b610626826105a4565b9392505050565b60008060006060848603121561064257600080fd5b61064b846105a4565b9250610659602085016105a4565b9150604084013590509250925092565b6000806040838503121561067c57600080fd5b610685836105a4565b9150610693602084016105a4565b90509250929050565b6000600160ff1b82016106bf57634e487b7160e01b600052601160045260246000fd5b506000039056fea26469706673582212209e9630ada512d87bb8dc9935bbff8cbce9af578c91474fa8233125f935d5221064736f6c634300080d0033",
+  "devdoc": {
+    "errors": {
+      "NotAuthorized()": [
+        {
+          "details": "Throws when action is not authorized"
+        }
+      ],
+      "NotLive()": [
+        {
+          "details": "Throws if the contract called when it is not live"
+        }
+      ],
+      "NotUpgrader()": [
+        {
+          "details": "Throws when function called not by upgrader"
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "add(address,address,int256)": {
+        "details": "Adds or subtract value of the asset",
+        "params": {
+          "asset": "Asset contract address",
+          "dest": "Balance owner address",
+          "value": "Asset value"
+        }
+      },
+      "deny(address)": {
+        "details": "Removes authorized party"
+      },
+      "move(address,address,address,uint256)": {
+        "details": "Move balance from the source to destination",
+        "params": {
+          "asset": "Asset contract address",
+          "dest": "Destination address",
+          "src": "Balance owner address",
+          "value": "Asset value"
+        }
+      },
+      "rely(address)": {
+        "details": "Adds authorized party"
+      },
+      "toggle()": {
+        "details": "Toggles the contract live flag"
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 1490,
+        "contract": "contracts/upgradeable/LedgerUpgradeable.sol:LedgerUpgradeable",
+        "label": "upgrader",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 1524,
+        "contract": "contracts/upgradeable/LedgerUpgradeable.sol:LedgerUpgradeable",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_array(t_uint256)50_storage"
+      },
+      {
+        "astId": 525,
+        "contract": "contracts/upgradeable/LedgerUpgradeable.sol:LedgerUpgradeable",
+        "label": "live",
+        "offset": 0,
+        "slot": "51",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 530,
+        "contract": "contracts/upgradeable/LedgerUpgradeable.sol:LedgerUpgradeable",
+        "label": "auth",
+        "offset": 0,
+        "slot": "52",
+        "type": "t_mapping(t_address,t_uint256)"
+      },
+      {
+        "astId": 647,
+        "contract": "contracts/upgradeable/LedgerUpgradeable.sol:LedgerUpgradeable",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "53",
+        "type": "t_array(t_uint256)50_storage"
+      },
+      {
+        "astId": 371,
+        "contract": "contracts/upgradeable/LedgerUpgradeable.sol:LedgerUpgradeable",
+        "label": "balances",
+        "offset": 0,
+        "slot": "103",
+        "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))"
+      },
+      {
+        "astId": 519,
+        "contract": "contracts/upgradeable/LedgerUpgradeable.sol:LedgerUpgradeable",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "104",
+        "type": "t_array(t_uint256)50_storage"
+      },
+      {
+        "astId": 1485,
+        "contract": "contracts/upgradeable/LedgerUpgradeable.sol:LedgerUpgradeable",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "154",
+        "type": "t_array(t_uint256)50_storage"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_uint256)50_storage": {
+        "base": "t_uint256",
+        "encoding": "inplace",
+        "label": "uint256[50]",
+        "numberOfBytes": "1600"
+      },
+      "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => mapping(address => uint256))",
+        "numberOfBytes": "32",
+        "value": "t_mapping(t_address,t_uint256)"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
