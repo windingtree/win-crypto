@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es5",
     "module": "commonjs",
     "resolveJsonModule": true,
     "strictNullChecks": true,
@@ -12,5 +12,5 @@
     "types": ["@nomiclabs/hardhat-ethers", "@nomiclabs/hardhat-waffle"],
     "skipLibCheck": true
   },
-  "include": ["./src"]
+  "include": ["./src", "./typechain"]
 }
