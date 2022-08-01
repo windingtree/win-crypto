@@ -150,3 +150,25 @@ yarn hardhat --network mainnet etherscan-verify
 ```
 
 **NOTE: Substitute `mainnet` above for the applicable target network.**
+
+### Scripts
+
+#### Registering a service provider
+
+```bash
+yarn hardhat --network sokol registerProvider --owner 0x2aAe83D2e734fA7A586C1C981175DFAb551fb512 --address 0x6f2fBD652A99Db4b8143c8383Ae39b5459268685 --provider win_win_provider
+
+> Provider registration tx:  0x4d6933e2097acc6be2ae38e9552876a733865e0602d19501371609aecda572ab
+> Provider 0x394e5c06a83eeea7fd8e0e50bb1ff1f13bec1a4e353a9a0f6db9dea030bcbef3 has been registered successfully
+           ^^^
+           providerId
+```
+
+### Minting of test tokens
+
+```bash
+yarn hardhat --network sokol mintTest --owner 0x2aAe83D2e734fA7A586C1C981175DFAb551fb512 --address 0x0462C345320C7Ed3071cd1426e6B62472C5bA96d --to 0xA0B74BFE28223c9e08d6DBFa74B5bf4Da763f959 --amount 1000000000000000000000000
+
+> Minting tx:  0xcc5eafdf3de6b77e3d133f8320bf44fa31c9d57aae050949c9023fd93048ab30
+> 1000000000000000000000000 has been minted to 0xA0B74BFE28223c9e08d6DBFa74B5bf4Da763f959 successfully
+```
