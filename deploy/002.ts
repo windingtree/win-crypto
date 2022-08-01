@@ -165,6 +165,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await Promise.all(
     authorizedAddresses.map((address) => execute('Ledger', { from: deployer, log: true }, 'rely', address))
   );
+
+  await execute('WinPay', { from: deployer, log: true }, 'register', utils.keccak256(utils.formatBytes32String('win_win_provider')), deployer);
 };
 
 export default func;
