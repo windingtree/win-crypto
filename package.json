@@ -93,6 +93,7 @@
     "lint:ts": "npx eslint . --ext .ts",
     "lint:sol": "npx solhint contracts/**/*.sol",
     "coverage": "npx hardhat coverage",
-    "deploy:sokol": "yarn hardhat deploy --gasprice 50000000000 --network sokol && yarn hardhat sourcify --network sokol"
+    "deploy:sokol": "yarn hardhat deploy --gasprice 50000000000 --network sokol && yarn hardhat sourcify --network sokol",
+    "scripts": "yarn hardhat --config ./hardhat.scripts.config.ts"
   }
 }
