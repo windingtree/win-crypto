@@ -10,6 +10,8 @@ import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 import 'hardhat-docgen';
 import { nodeUrl, accounts } from './utils/network';
+import './scripts/register';
+import './scripts/mint';
 
 import 'dotenv/config';
 
