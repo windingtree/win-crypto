@@ -12,6 +12,11 @@ import 'hardhat-docgen';
 import { nodeUrl, accounts } from './utils/network';
 import './scripts/register';
 import './scripts/mint';
+import './scripts/balance';
+import './scripts/refund';
+import './scripts/register';
+import './scripts/toggle';
+import './scripts/withdraw';
 
 import 'dotenv/config';
 
