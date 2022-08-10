@@ -1,7 +1,7 @@
 import { task } from 'hardhat/config';
 import { MockERC20Upgradeable__factory } from '../typechain';
 
-// Provider registration task
+// Tokens minting task
 task('mintTest', 'Mint test tokens')
   .addParam('address', 'Contract address')
   .addParam('owner', 'Contract owner address')
