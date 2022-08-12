@@ -20,8 +20,8 @@ contract Asset is Manageable {
   /// @dev Throws when uint265 value overflow
   error UintOverflow();
 
-  /// @dev Throws when transfer is filed
-  error TransferFiled(address src, address dst, address asset, uint256 value);
+  /// @dev Throws when transfer is failed
+  error TransferFailed(address src, address dst, address asset, uint256 value);
 
   /// @dev Throws when called wrapped associated function on the non-wrapped asset
   error NonWrappedAsset();
@@ -61,7 +61,7 @@ contract Asset is Manageable {
     ledger.add(dst, address(asset), int256(value));
     if (src != address(this)) {
       if (!asset.transferFrom(src, address(this), value)) {
-        revert TransferFiled(src, dst, address(asset), value);
+        revert TransferFailed(src, dst, address(asset), value);
       }
     }
     emit Join(dst, value);
@@ -123,7 +123,7 @@ contract Asset is Manageable {
     }
     ledger.add(msg.sender, address(asset), -int256(value));
     if (!asset.transfer(dst, value)) {
-      revert TransferFiled(address(this), dst, address(asset), value);
+      revert TransferFailed(address(this), dst, address(asset), value);
     }
     emit Exit(dst, value);
   }
