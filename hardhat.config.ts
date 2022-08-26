@@ -71,6 +71,16 @@ const config: HardhatUserConfig = {
       url: nodeUrl('polygon_mumbai'),
       accounts: accounts('polygon_mumbai'),
       tags: ['staging']
+    },
+    gnosis: {
+      url: nodeUrl('gnosis'),
+      accounts: accounts('gnosis'),
+      tags: ['production']
+    },
+    polygon: {
+      url: nodeUrl('polygon'),
+      accounts: accounts('polygon'),
+      tags: ['production']
     }
   },
   gasReporter: {
