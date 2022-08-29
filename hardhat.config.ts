@@ -72,6 +72,11 @@ const config: HardhatUserConfig = {
       accounts: accounts('polygon_mumbai'),
       tags: ['staging']
     },
+    chiado: {
+      url: nodeUrl('chiado'),
+      accounts: accounts('chiado'),
+      tags: ['staging']
+    },
     gnosis: {
       url: nodeUrl('gnosis'),
       accounts: accounts('gnosis'),

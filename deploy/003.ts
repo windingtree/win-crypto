@@ -1,7 +1,7 @@
+import { LedgerUpgradeable__factory } from '../typechain';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { network } from 'hardhat';
-import { utils } from 'ethers';
+import { ethers, network } from 'hardhat';
 
 /**
  * Gnosis chain deployments
@@ -95,21 +95,16 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       console.log(
         `Contract USDC Asset deployed at ${assetDeploy.address} using ${assetDeploy.receipt?.gasUsed} gas`
       );
-
-      authorizedAddresses.push(assetDeploy.address);
     }
 
-    // Authorize required addresses on the Ledger contract
-  await Promise.all(
-    authorizedAddresses.map((address) => execute('Ledger', { from: deployer, log: true }, 'rely', address))
-  );
-
-  await execute('WinPay', { from: deployer, log: true }, 'register', utils.keccak256(utils.formatBytes32String('win_win_provider')), deployer);
+    authorizedAddresses.push(assetDeploy.address);
   };
 
   // Deploy assets
   for (const asset of tokens[network.name]) {
     await deployAsset(asset, ledgerDeploy.address);
+    // Wait before next deployment
+    await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
   // Setup WinPay contract
@@ -124,13 +119,20 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   if (winPayDeploy.newlyDeployed) {
     console.log(`Contract WinPay deployed at ${winPayDeploy.address} using ${winPayDeploy.receipt?.gasUsed} gas`);
-
-    authorizedAddresses.push(winPayDeploy.address);
   }
 
+  authorizedAddresses.push(winPayDeploy.address);
+
   // Authorize required addresses on the Ledger contract
+  const ledgerFactory = await ethers.getContractFactory<LedgerUpgradeable__factory>('LedgerUpgradeable');
+  const ledger = ledgerFactory.attach(ledgerDeploy.address);
+
+  // List authorized addresses
+  console.log('Authorized addresses:', authorizedAddresses);
+
   await Promise.all(
-    authorizedAddresses.map((address) => execute('Ledger', { from: deployer, log: true }, 'rely', address))
+    // authorizedAddresses.map((address) => execute('Ledger', { from: deployer, log: true }, 'rely', address))
+    authorizedAddresses.map(address => ledger.rely(address, { from: deployer }))
   );
 };
 
