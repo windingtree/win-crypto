@@ -111,6 +111,11 @@ const tokens: NetworkTokens = {
       address: '0xa926db7a4cc0cb1736d5ac60495ca8eb7214b503',
       isWrapped: 0
     },
+    {
+      token: 'jPLN',
+      address: '0x08E6d1F0c4877Ef2993Ad733Fc6F1D022d0E9DBf',
+      isWrapped: 0
+    },
   ],
 };
 
