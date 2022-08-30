@@ -44,16 +44,83 @@ const tokens: NetworkTokens = {
       address: '0x2d5563da42b06fbbf9c67b7dc073cf6a7842239e',
       isWrapped: 0
     },
-  ]
+  ],
+  polygon: [
+    {
+      token: 'DAI',
+      address: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
+      isWrapped: 0
+    },
+    {
+      token: 'USDC',
+      address: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+      isWrapped: 0
+    },
+    {
+      token: 'USDT',
+      address: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',//no permit
+      isWrapped: 0
+    },
+    {
+      token: 'EURE',
+      address: '0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6',//no permit
+      isWrapped: 0
+    },
+    {
+      token: 'EURS',
+      address: '0xe111178a87a3bff0c8d18decba5798827539ae99',//no permit
+      isWrapped: 0
+    },
+    {
+      token: 'jEUR',
+      address: '0x4e3decbb3645551b8a19f0ea1678079fcb33fb4c',
+      isWrapped: 0
+    },
+    {
+      token: 'jCHF',
+      address: '0xbd1463f02f61676d53fd183c2b19282bff93d099',
+      isWrapped: 0
+    },
+    {
+      token: 'jGBP',
+      address: '0x767058f11800fba6a682e73a6e79ec5eb74fac8c',
+      isWrapped: 0
+    },
+    {
+      token: 'jAUD',
+      address: '0xcb7f1ef7246d1497b985f7fc45a1a31f04346133',
+      isWrapped: 0
+    },
+    {
+      token: 'jCAD',
+      address: '0x8ca194a3b22077359b5732de53373d4afc11dee3',
+      isWrapped: 0
+    },
+    {
+      token: 'jJPY',
+      address: '0x8343091f2499fd4b6174a46d067a920a3b851ff9',
+      isWrapped: 0
+    },
+    {
+      token: 'jSEK',
+      address: '0x197e5d6ccff265ac3e303a34db360ee1429f5d1a',
+      isWrapped: 0
+    },
+    {
+      token: 'jSGD',
+      address: '0xa926db7a4cc0cb1736d5ac60495ca8eb7214b503',
+      isWrapped: 0
+    },
+  ],
 };
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  if (!['gnosis'].includes(network.name)) {
+  if (!['gnosis', 'polygon'].includes(network.name)) {
     return;
   }
 
   const { deployments, getNamedAccounts } = hre;
-  const { deploy, execute } = deployments;
+  const { deploy } = deployments;
 
   const { deployer } = await getNamedAccounts();
   console.log(`Deployer: ${deployer}`);
@@ -93,7 +160,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
     if (assetDeploy.newlyDeployed) {
       console.log(
-        `Contract USDC Asset deployed at ${assetDeploy.address} using ${assetDeploy.receipt?.gasUsed} gas`
+        `${asset.token} Asset deployed at ${assetDeploy.address} using ${assetDeploy.receipt?.gasUsed} gas`
       );
     }
 
@@ -127,13 +194,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const ledgerFactory = await ethers.getContractFactory<LedgerUpgradeable__factory>('LedgerUpgradeable');
   const ledger = ledgerFactory.attach(ledgerDeploy.address);
 
-  // List authorized addresses
-  console.log('Authorized addresses:', authorizedAddresses);
-
-  await Promise.all(
-    // authorizedAddresses.map((address) => execute('Ledger', { from: deployer, log: true }, 'rely', address))
-    authorizedAddresses.map(address => ledger.rely(address, { from: deployer }))
-  );
+  // List of authorized addresses
+  console.log('Authorized by the Ledger');
+  for (const address of authorizedAddresses) {
+    const auth = await ledger.auth(address);
+    if (auth.eq(ethers.BigNumber.from(0))) {
+      await ledger.rely(address, { from: deployer });
+    }
+    console.log('Authorized:', address);
+  }
 };
 
 export default func;

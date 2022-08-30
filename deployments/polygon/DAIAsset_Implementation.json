@@ -1,0 +1,698 @@
+{
+  "address": "0xD933aB5913c3302382bD2632510af453565b2E6D",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_ledger",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_asset",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_wrapped",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidValue",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NonWrappedAsset",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotAuthorized",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotLive",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotUpgrader",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "src",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "dst",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "asset",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "TransferFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "UintOverflow",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "party",
+          "type": "address"
+        }
+      ],
+      "name": "Deny",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "dst",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Exit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "src",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Join",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "live",
+          "type": "uint256"
+        }
+      ],
+      "name": "Live",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "party",
+          "type": "address"
+        }
+      ],
+      "name": "Rely",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "asset",
+      "outputs": [
+        {
+          "internalType": "contract WrappedErc20Like",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "auth",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "party",
+          "type": "address"
+        }
+      ],
+      "name": "deny",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "dst",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "exit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "src",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "dst",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint8",
+              "name": "v",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "r",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "s",
+              "type": "bytes32"
+            }
+          ],
+          "internalType": "struct Permit.EIP2612Permit",
+          "name": "permit",
+          "type": "tuple"
+        }
+      ],
+      "name": "join",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "dst",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "join",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "src",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "dst",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "join",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "dst",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "joinWrapped",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "ledger",
+      "outputs": [
+        {
+          "internalType": "contract LedgerLike",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "live",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_ledger",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_asset",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_wrapped",
+          "type": "uint256"
+        }
+      ],
+      "name": "postUpgrade",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "party",
+          "type": "address"
+        }
+      ],
+      "name": "rely",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "toggle",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "upgrader",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "wrapped",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xa098dccebe7fb9dd519f7b509e281f20969e87e1f6827ff94ce058f9f51f55a9",
+  "receipt": {
+    "to": null,
+    "from": "0xfA234A21AF15AF7D6B2F55FCa2e71971aa5fD02f",
+    "contractAddress": "0xD933aB5913c3302382bD2632510af453565b2E6D",
+    "transactionIndex": 44,
+    "gasUsed": "839034",
+    "logsBloom": "0x0000000000000000000000000000000000000000000000000000000000000000000000000000080000000001000000000000c000000200000000000000000000000000400000000000000000000000800000000000000000000100000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000100000000000000000040000000000000200000000000000000000000000000000000000000000000000000000000004000000000000000000001000000000000080000000000000000100000000010000000000000000000000000000000000000000000100004000000000000100020",
+    "blockHash": "0x57675880ec9a1d250f26b10b24cc35212449f8c4fb25d660fd3f0d2ae77139bb",
+    "transactionHash": "0xa098dccebe7fb9dd519f7b509e281f20969e87e1f6827ff94ce058f9f51f55a9",
+    "logs": [
+      {
+        "transactionIndex": 44,
+        "blockNumber": 32479849,
+        "transactionHash": "0xa098dccebe7fb9dd519f7b509e281f20969e87e1f6827ff94ce058f9f51f55a9",
+        "address": "0xD933aB5913c3302382bD2632510af453565b2E6D",
+        "topics": [
+          "0xdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a60"
+        ],
+        "data": "0x000000000000000000000000fa234a21af15af7d6b2f55fca2e71971aa5fd02f",
+        "logIndex": 163,
+        "blockHash": "0x57675880ec9a1d250f26b10b24cc35212449f8c4fb25d660fd3f0d2ae77139bb"
+      },
+      {
+        "transactionIndex": 44,
+        "blockNumber": 32479849,
+        "transactionHash": "0xa098dccebe7fb9dd519f7b509e281f20969e87e1f6827ff94ce058f9f51f55a9",
+        "address": "0x0000000000000000000000000000000000001010",
+        "topics": [
+          "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+          "0x0000000000000000000000000000000000000000000000000000000000001010",
+          "0x000000000000000000000000fa234a21af15af7d6b2f55fca2e71971aa5fd02f",
+          "0x000000000000000000000000127685d6dd6683085da4b6a041efcef1681e5c9c"
+        ],
+        "data": "0x00000000000000000000000000000000000000000000000000891e76022038000000000000000000000000000000000000000000000000001393994ede46735c000000000000000000000000000000000000000000001c361025ca8b43621195000000000000000000000000000000000000000000000000130a7ad8dc263b5c000000000000000000000000000000000000000000001c3610aee90145824995",
+        "logIndex": 164,
+        "blockHash": "0x57675880ec9a1d250f26b10b24cc35212449f8c4fb25d660fd3f0d2ae77139bb"
+      }
+    ],
+    "blockNumber": 32479849,
+    "cumulativeGasUsed": "7506892",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0xc2024b4Ff3764b8AEb5FCfB4f248124B80A2367a",
+    "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+    0
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "f64ba90a9d0f055c1d83f29e8ed562da",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_ledger\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_asset\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_wrapped\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"InvalidValue\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NonWrappedAsset\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotAuthorized\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotLive\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotUpgrader\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"asset\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TransferFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UintOverflow\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"party\",\"type\":\"address\"}],\"name\":\"Deny\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Exit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Join\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"live\",\"type\":\"uint256\"}],\"name\":\"Live\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"party\",\"type\":\"address\"}],\"name\":\"Rely\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"asset\",\"outputs\":[{\"internalType\":\"contract WrappedErc20Like\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"auth\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"party\",\"type\":\"address\"}],\"name\":\"deny\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"exit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"internalType\":\"struct Permit.EIP2612Permit\",\"name\":\"permit\",\"type\":\"tuple\"}],\"name\":\"join\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"join\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"join\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"joinWrapped\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ledger\",\"outputs\":[{\"internalType\":\"contract LedgerLike\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"live\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_ledger\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_asset\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_wrapped\",\"type\":\"uint256\"}],\"name\":\"postUpgrade\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"party\",\"type\":\"address\"}],\"name\":\"rely\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"toggle\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"upgrader\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"wrapped\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"errors\":{\"InvalidValue()\":[{\"details\":\"Throws when invalid value provided\"}],\"NonWrappedAsset()\":[{\"details\":\"Throws when called wrapped associated function on the non-wrapped asset\"}],\"NotAuthorized()\":[{\"details\":\"Throws when action is not authorized\"}],\"NotLive()\":[{\"details\":\"Throws if the contract called when it is not live\"}],\"NotUpgrader()\":[{\"details\":\"Throws when function called not by upgrader\"}],\"TransferFailed(address,address,address,uint256)\":[{\"details\":\"Throws when transfer is failed\"}],\"UintOverflow()\":[{\"details\":\"Throws when uint265 value overflow\"}]},\"kind\":\"dev\",\"methods\":{\"deny(address)\":{\"details\":\"Removes authorized party\"},\"exit(address,uint256)\":{\"details\":\"Withdraws funds\",\"params\":{\"dst\":\"Asset destination address (balance owner)\",\"value\":\"Asset value\"}},\"join(address,address,uint256)\":{\"details\":\"Joins ERC20 compatible assets directly from known address\",\"params\":{\"dst\":\"Asset destination address (balance owner)\",\"src\":\"Asset owner address\",\"value\":\"Asset value\"}},\"join(address,address,uint256,(address,uint256,uint8,bytes32,bytes32))\":{\"details\":\"Joins ERC20 compatible assets directly from known address with permit\",\"params\":{\"dst\":\"Asset destination address (balance owner)\",\"src\":\"Asset owner address\",\"value\":\"Asset value\"}},\"join(address,uint256)\":{\"details\":\"Joins ERC20 compatible assets directly from sender\",\"params\":{\"dst\":\"Asset destination address (balance owner)\",\"value\":\"Asset value\"}},\"joinWrapped(address,uint256)\":{\"details\":\"Joins ERC20 compatible assets directly from sender\",\"params\":{\"dst\":\"Asset destination address (balance owner)\",\"value\":\"Asset value\"}},\"rely(address)\":{\"details\":\"Adds authorized party\"},\"toggle()\":{\"details\":\"Toggles the contract live flag\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/upgradeable/AssetUpgradeable.sol\":\"AssetUpgradeable\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/Asset.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nimport {Manageable} from './Manageable.sol';\\nimport {Permit} from './libraries/Permit.sol';\\nimport {LedgerLike, WrappedErc20Like} from './interfaces/Common.sol';\\n\\ncontract Asset is Manageable {\\n  /// @dev Reference to Ledger contract\\n  LedgerLike public ledger;\\n\\n  /// @dev Reference to asset contract\\n  WrappedErc20Like public asset;\\n\\n  /// @dev Flag if the asset is wrapped\\n  uint256 public wrapped;\\n\\n  // --- errors\\n\\n  /// @dev Throws when uint265 value overflow\\n  error UintOverflow();\\n\\n  /// @dev Throws when transfer is failed\\n  error TransferFailed(address src, address dst, address asset, uint256 value);\\n\\n  /// @dev Throws when called wrapped associated function on the non-wrapped asset\\n  error NonWrappedAsset();\\n\\n  /// @dev Throws when invalid value provided\\n  error InvalidValue();\\n\\n  // --- events\\n\\n  /// @dev Emitted when asset joined\\n  event Join(address src, uint256 value);\\n\\n  /// @dev Emitted when asset has been withdrawn\\n  event Exit(address dst, uint256 value);\\n\\n  constructor(\\n    address _ledger,\\n    address _asset,\\n    uint256 _wrapped\\n  ) {\\n    auth[msg.sender] = 1;\\n    live = 1;\\n    ledger = LedgerLike(_ledger);\\n    wrapped = _wrapped;\\n    asset = WrappedErc20Like(_asset);\\n    emit Rely(msg.sender);\\n  }\\n\\n  function _join(\\n    address src,\\n    address dst,\\n    uint256 value\\n  ) internal {\\n    if (int256(value) < 0) {\\n      revert UintOverflow();\\n    }\\n    ledger.add(dst, address(asset), int256(value));\\n    if (src != address(this)) {\\n      if (!asset.transferFrom(src, address(this), value)) {\\n        revert TransferFailed(src, dst, address(asset), value);\\n      }\\n    }\\n    emit Join(dst, value);\\n  }\\n\\n  /// @dev Joins ERC20 compatible assets directly from sender\\n  /// @param dst Asset destination address (balance owner)\\n  /// @param value Asset value\\n  function join(address dst, uint256 value) external onlyLive {\\n    _join(msg.sender, dst, value);\\n  }\\n\\n  /// @dev Joins ERC20 compatible assets directly from known address\\n  /// @param src Asset owner address\\n  /// @param dst Asset destination address (balance owner)\\n  /// @param value Asset value\\n  function join(\\n    address src,\\n    address dst,\\n    uint256 value\\n  ) external onlyLive {\\n    _join(src, dst, value);\\n  }\\n\\n  /// @dev Joins ERC20 compatible assets directly from known address with permit\\n  /// @param src Asset owner address\\n  /// @param dst Asset destination address (balance owner)\\n  /// @param value Asset value\\n  function join(\\n    address src,\\n    address dst,\\n    uint256 value,\\n    Permit.EIP2612Permit calldata permit\\n  ) external onlyLive {\\n    asset.permit(src, address(this), value, permit.deadline, permit.v, permit.r, permit.s);\\n    _join(src, dst, value);\\n  }\\n\\n  /// @dev Joins ERC20 compatible assets directly from sender\\n  /// @param dst Asset destination address (balance owner)\\n  /// @param value Asset value\\n  function joinWrapped(address dst, uint256 value) external payable onlyLive {\\n    if (wrapped == 0) {\\n      revert NonWrappedAsset();\\n    }\\n    if (msg.value != value) {\\n      revert InvalidValue();\\n    }\\n    asset.deposit{value: msg.value}();\\n    _join(address(this), dst, value);\\n  }\\n\\n  /// @dev Withdraws funds\\n  /// @param dst Asset destination address (balance owner)\\n  /// @param value Asset value\\n  function exit(address dst, uint256 value) external onlyLive {\\n    if (value > 2**255) {\\n      revert UintOverflow();\\n    }\\n    ledger.add(msg.sender, address(asset), -int256(value));\\n    if (!asset.transfer(dst, value)) {\\n      revert TransferFailed(address(this), dst, address(asset), value);\\n    }\\n    emit Exit(dst, value);\\n  }\\n\\n  uint256[50] private __gap;\\n}\\n\",\"keccak256\":\"0x0ab18b8f1ee155b21eba3b50737ef2b3a170cb906e3cd8532f834789f5976351\",\"license\":\"GPL-3.0-only\"},\"contracts/Manageable.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nabstract contract Manageable {\\n  /// @dev Active flag\\n  uint256 public live;\\n\\n  /// @dev Authorized parties\\n  mapping(address => uint256) public auth;\\n\\n  // -- errors\\n\\n  /// @dev Throws if the contract called when it is not live\\n  error NotLive();\\n\\n  /// @dev Throws when action is not authorized\\n  error NotAuthorized();\\n\\n  // -- events\\n\\n  /// @dev Emitted when the contract live flag is changed\\n  event Live(uint256 live);\\n\\n  /// @dev Emitted when a party is authorized\\n  event Rely(address party);\\n\\n  /// @dev Emitted when a party is denied\\n  event Deny(address party);\\n\\n  // --- modifiers\\n\\n  /// @dev Checks if the sender is authorized\\n  modifier authorized() {\\n    if (auth[msg.sender] != 1) {\\n      revert NotAuthorized();\\n    }\\n    _;\\n  }\\n\\n  /// @dev Checks is the contract live\\n  modifier onlyLive() {\\n    if (live == 0) {\\n      revert NotLive();\\n    }\\n    _;\\n  }\\n\\n  // --- admin\\n\\n  /// @dev Toggles the contract live flag\\n  function toggle() external authorized {\\n    if (live == 1) {\\n      live = 0;\\n    } else {\\n      live = 1;\\n    }\\n    emit Live(live);\\n  }\\n\\n  /// @dev Adds authorized party\\n  function rely(address party) external authorized {\\n    auth[party] = 1;\\n    emit Rely(party);\\n  }\\n\\n  /// @dev Removes authorized party\\n  function deny(address party) external authorized {\\n    auth[party] = 0;\\n    emit Deny(party);\\n  }\\n\\n  uint256[50] private __gap;\\n}\\n\",\"keccak256\":\"0xb90e97de9f804b5eb380e9dee4a419d55463f7760ccf9ee703d93776e290e4f4\",\"license\":\"GPL-3.0-only\"},\"contracts/interfaces/Common.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nimport {Permit} from '../libraries/Permit.sol';\\n\\ninterface LedgerLike {\\n  function balances(address dst, address asset) external returns (uint256);\\n\\n  function add(\\n    address,\\n    address,\\n    int256\\n  ) external;\\n\\n  function move(\\n    address src,\\n    address dst,\\n    address asset,\\n    uint256 value\\n  ) external;\\n}\\n\\ninterface Erc20Like {\\n  function decimals() external view returns (uint256);\\n\\n  function transfer(address, uint256) external returns (bool);\\n\\n  function transferFrom(\\n    address,\\n    address,\\n    uint256\\n  ) external returns (bool);\\n\\n  function permit(\\n    address owner,\\n    address spender,\\n    uint256 value,\\n    uint256 deadline,\\n    uint8 v,\\n    bytes32 r,\\n    bytes32 s\\n  ) external;\\n}\\n\\ninterface WrappedErc20Like is Erc20Like {\\n  function deposit() external payable;\\n\\n  function withdraw(uint256 wad) external;\\n}\\n\\ninterface AssetLike {\\n  function ledger() external returns (address);\\n\\n  function asset() external returns (address);\\n\\n  function wrapped() external returns (uint256);\\n\\n  function join(address dst, uint256 value) external;\\n\\n  function join(\\n    address src,\\n    address dst,\\n    uint256 value\\n  ) external;\\n\\n  function join(\\n    address src,\\n    address dst,\\n    uint256 value,\\n    Permit.EIP2612Permit memory permit\\n  ) external;\\n\\n  function joinWrapped(address dst, uint256 value) external payable;\\n\\n  function exit(address dst, uint256 value) external;\\n}\\n\",\"keccak256\":\"0x3bf48397aeca75078e3852473e84fb25d99a31c53c55d3100eddafc1e3096ef9\",\"license\":\"GPL-3.0-only\"},\"contracts/libraries/Permit.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nlibrary Permit {\\n  struct EIP2612Permit {\\n    address owner;\\n    uint256 deadline;\\n    uint8 v;\\n    bytes32 r;\\n    bytes32 s;\\n  }\\n}\\n\",\"keccak256\":\"0xdb44faa5762bf9d8033a50f81040f9a922ed5b415a90bc85deef6ce9713dcd66\",\"license\":\"GPL-3.0-only\"},\"contracts/upgradeable/AssetUpgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nimport {Asset} from '../Asset.sol';\\nimport {LedgerLike, WrappedErc20Like} from '../interfaces/Common.sol';\\nimport {Upgradeable} from './Upgradeable.sol';\\n\\ncontract AssetUpgradeable is Upgradeable, Asset {\\n  constructor(\\n    address _ledger,\\n    address _asset,\\n    uint256 _wrapped\\n  ) Asset(_ledger, _asset, _wrapped) {}\\n\\n  function postUpgrade(\\n    address _ledger,\\n    address _asset,\\n    uint256 _wrapped\\n  ) public onlyUpgrader {\\n    auth[msg.sender] = 1;\\n    live = 1;\\n    ledger = LedgerLike(_ledger);\\n    wrapped = _wrapped;\\n    asset = WrappedErc20Like(_asset);\\n    emit Rely(msg.sender);\\n  }\\n\\n  uint256[50] private __gap;\\n}\\n\",\"keccak256\":\"0x3b32f863c67820c446abacd5494089b451f94943ea6b2b74cc5f97da1568f87e\",\"license\":\"GPL-3.0-only\"},\"contracts/upgradeable/Upgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0-only\\npragma solidity ^0.8.13;\\n\\nabstract contract Upgradeable {\\n  address public upgrader;\\n\\n  /// @dev Throws when function called not by upgrader\\n  error NotUpgrader();\\n\\n  /// @dev Checks is the caller is upgrader\\n  modifier onlyUpgrader() {\\n    if (upgrader == address(0)) {\\n      upgrader = msg.sender;\\n    }\\n    if (msg.sender != upgrader) {\\n      revert NotUpgrader();\\n    }\\n    _;\\n  }\\n\\n  uint256[50] private __gap;\\n}\\n\",\"keccak256\":\"0xd2af52add71b029d9a17e22cbac85e5b052de945fc42636e2802e10e6045b107\",\"license\":\"GPL-3.0-only\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50604051610d9e380380610d9e83398101604081905261002f916100dd565b33600081815260346020908152604091829020600190819055603355606780546001600160a01b038881166001600160a01b0319928316179092556069869055606880549288169290911691909117905590519182528491849184917fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a60910160405180910390a1505050505050610119565b80516001600160a01b03811681146100d857600080fd5b919050565b6000806000606084860312156100f257600080fd5b6100fb846100c1565b9250610109602085016100c1565b9150604084015190509250925092565b610c76806101286000396000f3fe6080604052600436106100e85760003560e01c806365fae35e1161008a5780639f6c3dbd116100595780639f6c3dbd1461024e578063af2697451461026e578063cd5d21181461028e578063ef693bed146102bb57600080fd5b806365fae35e146101d857806374beba3e146101f8578063957aa58c146102185780639c52a7f11461022e57600080fd5b80633b4da69f116100c65780633b4da69f1461015f57806340a3d2461461017f57806350e70d481461019457806356397c35146101b857600080fd5b806318e1c6fc146100ed5780632f1e6f471461010257806338d52e0f14610122575b600080fd5b6101006100fb366004610af1565b6102db565b005b34801561010e57600080fd5b5061010061011d366004610b1b565b6103b9565b34801561012e57600080fd5b50606854610142906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b34801561016b57600080fd5b5061010061017a366004610af1565b6104a1565b34801561018b57600080fd5b506101006104cf565b3480156101a057600080fd5b506101aa60695481565b604051908152602001610156565b3480156101c457600080fd5b50606754610142906001600160a01b031681565b3480156101e457600080fd5b506101006101f3366004610b73565b610556565b34801561020457600080fd5b50610100610213366004610b95565b6105da565b34801561022457600080fd5b506101aa60335481565b34801561023a57600080fd5b50610100610249366004610b73565b6106af565b34801561025a57600080fd5b50610100610269366004610b95565b61072b565b34801561027a57600080fd5b50600054610142906001600160a01b031681565b34801561029a57600080fd5b506101aa6102a9366004610b73565b60346020526000908152604090205481565b3480156102c757600080fd5b506101006102d6366004610af1565b61075e565b6033546000036102fe5760405163baf13b3f60e01b815260040160405180910390fd5b606954600003610321576040516326f6e52360e01b815260040160405180910390fd5b80341461034157604051632a9ffab760e21b815260040160405180910390fd5b606860009054906101000a90046001600160a01b03166001600160a01b031663d0e30db0346040518263ffffffff1660e01b81526004016000604051808303818588803b15801561039157600080fd5b505af11580156103a5573d6000803e3d6000fd5b50505050506103b5308383610934565b5050565b6033546000036103dc5760405163baf13b3f60e01b815260040160405180910390fd5b6068546001600160a01b031663d505accf85308560208601356104056060880160408901610bd1565b6040516001600160e01b031960e088901b1681526001600160a01b0395861660048201529490931660248501526044840191909152606483015260ff166084820152606084013560a4820152608084013560c482015260e401600060405180830381600087803b15801561047857600080fd5b505af115801561048c573d6000803e3d6000fd5b5050505061049b848484610934565b50505050565b6033546000036104c45760405163baf13b3f60e01b815260040160405180910390fd5b6103b5338383610934565b336000908152603460205260409020546001146104ff5760405163ea8e4eb560e01b815260040160405180910390fd5b603354600103610513576000603355610519565b60016033555b7f6b00bc0a71d2071ceffc66d2746ca7c3b550c2d5115a690a8761f81f04e2cf8060335460405161054c91815260200190565b60405180910390a1565b336000908152603460205260409020546001146105865760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b0381166000818152603460209081526040918290206001905590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a6091015b60405180910390a150565b6000546001600160a01b03166105fd57600080546001600160a01b031916331790555b6000546001600160a01b031633146106285760405163520ba28160e11b815260040160405180910390fd5b33600081815260346020908152604091829020600190819055603355606780546001600160a01b038881166001600160a01b0319928316179092556069869055606880549288169290911691909117905590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a6091015b60405180910390a1505050565b336000908152603460205260409020546001146106df5760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b03811660008181526034602090815260408083209290925590519182527f184450df2e323acec0ed3b5c7531b81f9b4cdef7914dfd4c0a4317416bb5251b91016105cf565b60335460000361074e5760405163baf13b3f60e01b815260040160405180910390fd5b610759838383610934565b505050565b6033546000036107815760405163baf13b3f60e01b815260040160405180910390fd5b600160ff1b8111156107a65760405163d72f3afd60e01b815260040160405180910390fd5b6067546068546001600160a01b039182169163b6885669913391166107ca85610bf4565b6040516001600160e01b031960e086901b1681526001600160a01b0393841660048201529290911660248301526044820152606401600060405180830381600087803b15801561081957600080fd5b505af115801561082d573d6000803e3d6000fd5b505060685460405163a9059cbb60e01b81526001600160a01b03868116600483015260248201869052909116925063a9059cbb91506044016020604051808303816000875af1158015610884573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108a89190610c1e565b6108ee5760685460405163cd3f165960e01b81523060048201526001600160a01b0380851660248301529091166044820152606481018290526084015b60405180910390fd5b604080516001600160a01b0384168152602081018390527f22d324652c93739755cf4581508b60875ebdd78c20c0cff5cf8e23452b299631910160405180910390a15050565b60008112156109565760405163d72f3afd60e01b815260040160405180910390fd5b60675460685460405163b688566960e01b81526001600160a01b03858116600483015291821660248201526044810184905291169063b688566990606401600060405180830381600087803b1580156109ae57600080fd5b505af11580156109c2573d6000803e3d6000fd5b505050506001600160a01b0383163014610a96576068546040516323b872dd60e01b81526001600160a01b03858116600483015230602483015260448201849052909116906323b872dd906064016020604051808303816000875af1158015610a2f573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610a539190610c1e565b610a965760685460405163cd3f165960e01b81526001600160a01b03808616600483015280851660248301529091166044820152606481018290526084016108e5565b604080516001600160a01b0384168152602081018390527fb4e09949657f21548b58afe74e7b86cd2295da5ff1598ae1e5faecb1cf19ca9591016106a2565b80356001600160a01b0381168114610aec57600080fd5b919050565b60008060408385031215610b0457600080fd5b610b0d83610ad5565b946020939093013593505050565b600080600080848603610100811215610b3357600080fd5b610b3c86610ad5565b9450610b4a60208701610ad5565b93506040860135925060a0605f1982011215610b6557600080fd5b509295919450926060019150565b600060208284031215610b8557600080fd5b610b8e82610ad5565b9392505050565b600080600060608486031215610baa57600080fd5b610bb384610ad5565b9250610bc160208501610ad5565b9150604084013590509250925092565b600060208284031215610be357600080fd5b813560ff81168114610b8e57600080fd5b6000600160ff1b8201610c1757634e487b7160e01b600052601160045260246000fd5b5060000390565b600060208284031215610c3057600080fd5b81518015158114610b8e57600080fdfea2646970667358221220652c260a43a1f737eb4bc3d557096f49da2fac949b23e2e874022f5d6236b27f64736f6c634300080d0033",
+  "deployedBytecode": "0x6080604052600436106100e85760003560e01c806365fae35e1161008a5780639f6c3dbd116100595780639f6c3dbd1461024e578063af2697451461026e578063cd5d21181461028e578063ef693bed146102bb57600080fd5b806365fae35e146101d857806374beba3e146101f8578063957aa58c146102185780639c52a7f11461022e57600080fd5b80633b4da69f116100c65780633b4da69f1461015f57806340a3d2461461017f57806350e70d481461019457806356397c35146101b857600080fd5b806318e1c6fc146100ed5780632f1e6f471461010257806338d52e0f14610122575b600080fd5b6101006100fb366004610af1565b6102db565b005b34801561010e57600080fd5b5061010061011d366004610b1b565b6103b9565b34801561012e57600080fd5b50606854610142906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b34801561016b57600080fd5b5061010061017a366004610af1565b6104a1565b34801561018b57600080fd5b506101006104cf565b3480156101a057600080fd5b506101aa60695481565b604051908152602001610156565b3480156101c457600080fd5b50606754610142906001600160a01b031681565b3480156101e457600080fd5b506101006101f3366004610b73565b610556565b34801561020457600080fd5b50610100610213366004610b95565b6105da565b34801561022457600080fd5b506101aa60335481565b34801561023a57600080fd5b50610100610249366004610b73565b6106af565b34801561025a57600080fd5b50610100610269366004610b95565b61072b565b34801561027a57600080fd5b50600054610142906001600160a01b031681565b34801561029a57600080fd5b506101aa6102a9366004610b73565b60346020526000908152604090205481565b3480156102c757600080fd5b506101006102d6366004610af1565b61075e565b6033546000036102fe5760405163baf13b3f60e01b815260040160405180910390fd5b606954600003610321576040516326f6e52360e01b815260040160405180910390fd5b80341461034157604051632a9ffab760e21b815260040160405180910390fd5b606860009054906101000a90046001600160a01b03166001600160a01b031663d0e30db0346040518263ffffffff1660e01b81526004016000604051808303818588803b15801561039157600080fd5b505af11580156103a5573d6000803e3d6000fd5b50505050506103b5308383610934565b5050565b6033546000036103dc5760405163baf13b3f60e01b815260040160405180910390fd5b6068546001600160a01b031663d505accf85308560208601356104056060880160408901610bd1565b6040516001600160e01b031960e088901b1681526001600160a01b0395861660048201529490931660248501526044840191909152606483015260ff166084820152606084013560a4820152608084013560c482015260e401600060405180830381600087803b15801561047857600080fd5b505af115801561048c573d6000803e3d6000fd5b5050505061049b848484610934565b50505050565b6033546000036104c45760405163baf13b3f60e01b815260040160405180910390fd5b6103b5338383610934565b336000908152603460205260409020546001146104ff5760405163ea8e4eb560e01b815260040160405180910390fd5b603354600103610513576000603355610519565b60016033555b7f6b00bc0a71d2071ceffc66d2746ca7c3b550c2d5115a690a8761f81f04e2cf8060335460405161054c91815260200190565b60405180910390a1565b336000908152603460205260409020546001146105865760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b0381166000818152603460209081526040918290206001905590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a6091015b60405180910390a150565b6000546001600160a01b03166105fd57600080546001600160a01b031916331790555b6000546001600160a01b031633146106285760405163520ba28160e11b815260040160405180910390fd5b33600081815260346020908152604091829020600190819055603355606780546001600160a01b038881166001600160a01b0319928316179092556069869055606880549288169290911691909117905590519182527fdd0e34038ac38b2a1ce960229778ac48a8719bc900b6c4f8d0475c6e8b385a6091015b60405180910390a1505050565b336000908152603460205260409020546001146106df5760405163ea8e4eb560e01b815260040160405180910390fd5b6001600160a01b03811660008181526034602090815260408083209290925590519182527f184450df2e323acec0ed3b5c7531b81f9b4cdef7914dfd4c0a4317416bb5251b91016105cf565b60335460000361074e5760405163baf13b3f60e01b815260040160405180910390fd5b610759838383610934565b505050565b6033546000036107815760405163baf13b3f60e01b815260040160405180910390fd5b600160ff1b8111156107a65760405163d72f3afd60e01b815260040160405180910390fd5b6067546068546001600160a01b039182169163b6885669913391166107ca85610bf4565b6040516001600160e01b031960e086901b1681526001600160a01b0393841660048201529290911660248301526044820152606401600060405180830381600087803b15801561081957600080fd5b505af115801561082d573d6000803e3d6000fd5b505060685460405163a9059cbb60e01b81526001600160a01b03868116600483015260248201869052909116925063a9059cbb91506044016020604051808303816000875af1158015610884573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108a89190610c1e565b6108ee5760685460405163cd3f165960e01b81523060048201526001600160a01b0380851660248301529091166044820152606481018290526084015b60405180910390fd5b604080516001600160a01b0384168152602081018390527f22d324652c93739755cf4581508b60875ebdd78c20c0cff5cf8e23452b299631910160405180910390a15050565b60008112156109565760405163d72f3afd60e01b815260040160405180910390fd5b60675460685460405163b688566960e01b81526001600160a01b03858116600483015291821660248201526044810184905291169063b688566990606401600060405180830381600087803b1580156109ae57600080fd5b505af11580156109c2573d6000803e3d6000fd5b505050506001600160a01b0383163014610a96576068546040516323b872dd60e01b81526001600160a01b03858116600483015230602483015260448201849052909116906323b872dd906064016020604051808303816000875af1158015610a2f573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610a539190610c1e565b610a965760685460405163cd3f165960e01b81526001600160a01b03808616600483015280851660248301529091166044820152606481018290526084016108e5565b604080516001600160a01b0384168152602081018390527fb4e09949657f21548b58afe74e7b86cd2295da5ff1598ae1e5faecb1cf19ca9591016106a2565b80356001600160a01b0381168114610aec57600080fd5b919050565b60008060408385031215610b0457600080fd5b610b0d83610ad5565b946020939093013593505050565b600080600080848603610100811215610b3357600080fd5b610b3c86610ad5565b9450610b4a60208701610ad5565b93506040860135925060a0605f1982011215610b6557600080fd5b509295919450926060019150565b600060208284031215610b8557600080fd5b610b8e82610ad5565b9392505050565b600080600060608486031215610baa57600080fd5b610bb384610ad5565b9250610bc160208501610ad5565b9150604084013590509250925092565b600060208284031215610be357600080fd5b813560ff81168114610b8e57600080fd5b6000600160ff1b8201610c1757634e487b7160e01b600052601160045260246000fd5b5060000390565b600060208284031215610c3057600080fd5b81518015158114610b8e57600080fdfea2646970667358221220652c260a43a1f737eb4bc3d557096f49da2fac949b23e2e874022f5d6236b27f64736f6c634300080d0033",
+  "devdoc": {
+    "errors": {
+      "InvalidValue()": [
+        {
+          "details": "Throws when invalid value provided"
+        }
+      ],
+      "NonWrappedAsset()": [
+        {
+          "details": "Throws when called wrapped associated function on the non-wrapped asset"
+        }
+      ],
+      "NotAuthorized()": [
+        {
+          "details": "Throws when action is not authorized"
+        }
+      ],
+      "NotLive()": [
+        {
+          "details": "Throws if the contract called when it is not live"
+        }
+      ],
+      "NotUpgrader()": [
+        {
+          "details": "Throws when function called not by upgrader"
+        }
+      ],
+      "TransferFailed(address,address,address,uint256)": [
+        {
+          "details": "Throws when transfer is failed"
+        }
+      ],
+      "UintOverflow()": [
+        {
+          "details": "Throws when uint265 value overflow"
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "deny(address)": {
+        "details": "Removes authorized party"
+      },
+      "exit(address,uint256)": {
+        "details": "Withdraws funds",
+        "params": {
+          "dst": "Asset destination address (balance owner)",
+          "value": "Asset value"
+        }
+      },
+      "join(address,address,uint256)": {
+        "details": "Joins ERC20 compatible assets directly from known address",
+        "params": {
+          "dst": "Asset destination address (balance owner)",
+          "src": "Asset owner address",
+          "value": "Asset value"
+        }
+      },
+      "join(address,address,uint256,(address,uint256,uint8,bytes32,bytes32))": {
+        "details": "Joins ERC20 compatible assets directly from known address with permit",
+        "params": {
+          "dst": "Asset destination address (balance owner)",
+          "src": "Asset owner address",
+          "value": "Asset value"
+        }
+      },
+      "join(address,uint256)": {
+        "details": "Joins ERC20 compatible assets directly from sender",
+        "params": {
+          "dst": "Asset destination address (balance owner)",
+          "value": "Asset value"
+        }
+      },
+      "joinWrapped(address,uint256)": {
+        "details": "Joins ERC20 compatible assets directly from sender",
+        "params": {
+          "dst": "Asset destination address (balance owner)",
+          "value": "Asset value"
+        }
+      },
+      "rely(address)": {
+        "details": "Adds authorized party"
+      },
+      "toggle()": {
+        "details": "Toggles the contract live flag"
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 1490,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "upgrader",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 1524,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_array(t_uint256)50_storage"
+      },
+      {
+        "astId": 525,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "live",
+        "offset": 0,
+        "slot": "51",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 530,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "auth",
+        "offset": 0,
+        "slot": "52",
+        "type": "t_mapping(t_address,t_uint256)"
+      },
+      {
+        "astId": 647,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "53",
+        "type": "t_array(t_uint256)50_storage"
+      },
+      {
+        "astId": 14,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "ledger",
+        "offset": 0,
+        "slot": "103",
+        "type": "t_contract(LedgerLike)1240"
+      },
+      {
+        "astId": 18,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "asset",
+        "offset": 0,
+        "slot": "104",
+        "type": "t_contract(WrappedErc20Like)1294"
+      },
+      {
+        "astId": 21,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "wrapped",
+        "offset": 0,
+        "slot": "105",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 357,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "106",
+        "type": "t_array(t_uint256)50_storage"
+      },
+      {
+        "astId": 1442,
+        "contract": "contracts/upgradeable/AssetUpgradeable.sol:AssetUpgradeable",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "156",
+        "type": "t_array(t_uint256)50_storage"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_uint256)50_storage": {
+        "base": "t_uint256",
+        "encoding": "inplace",
+        "label": "uint256[50]",
+        "numberOfBytes": "1600"
+      },
+      "t_contract(LedgerLike)1240": {
+        "encoding": "inplace",
+        "label": "contract LedgerLike",
+        "numberOfBytes": "20"
+      },
+      "t_contract(WrappedErc20Like)1294": {
+        "encoding": "inplace",
+        "label": "contract WrappedErc20Like",
+        "numberOfBytes": "20"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
