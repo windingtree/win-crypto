@@ -8,7 +8,9 @@ import {
   AssetUpgradeable,
   WinPayUpgradeable__factory,
   LedgerUpgradeable__factory,
-  AssetUpgradeable__factory
+  AssetUpgradeable__factory,
+  ERC20,
+  ERC20__factory
 } from '../typechain';
 
 export const getWinPayContract = async (
@@ -39,4 +41,14 @@ export const getAssetContract = async (
   const signer = await hre.ethers.getSigner(signerAddress);
   return AssetUpgradeable__factory
     .connect(assetAddress, signer);
+}
+
+export const getErc20Contract = async (
+  hre: HardhatRuntimeEnvironment,
+  tokenAddress: string,
+  signerAddress: string
+): Promise<ERC20> => {
+  const signer = await hre.ethers.getSigner(signerAddress);
+  return ERC20__factory
+    .connect(tokenAddress, signer);
 }
