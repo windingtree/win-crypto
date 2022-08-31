@@ -151,8 +151,8 @@ The script for getting balances is already included in the `WinPay` repository a
 ```bash
 yarn scripts balance --network gnosis \
 	--address <LEDGER_ADDRESS>\
-	--account <provider_account_address>\
-  --provider <provider_id>\
+	--account <current_account>\
+  --provider <provider_wallet_address>\
   --asset <token_contract_address>
 ```
 
