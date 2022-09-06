@@ -43,6 +43,8 @@ interface Erc20Like {
 }
 
 interface WrappedErc20Like is Erc20Like {
+  function balanceOf(address) external returns (uint256);
+
   function deposit() external payable;
 
   function withdraw(uint256 wad) external;

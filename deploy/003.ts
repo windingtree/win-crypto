@@ -132,8 +132,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const PROXY_SETTINGS_WITH_UPGRADE = {
     owner: deployer,
-    proxyContract: 'OpenZeppelinTransparentProxy',
-    methodName: 'postUpgrade'
+    proxyContract: 'OpenZeppelinTransparentProxy'
   };
 
   // Setup Ledger
