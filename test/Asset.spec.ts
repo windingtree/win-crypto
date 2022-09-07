@@ -3,7 +3,7 @@ import { utils, constants, Wallet } from 'ethers';
 import { setup, AccountWithContract } from './utils/fixture';
 import { createPermitSignature } from '../src';
 
-describe('Asset', function () {
+describe('Asset', () => {
   let alice: AccountWithContract;
   let deployer: AccountWithContract;
   let bob: AccountWithContract;

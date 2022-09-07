@@ -20,6 +20,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   console.log(`Bob: ${bob}`);
   console.log(`Carol: ${carol}`);
 
+  const PROXY_SETTINGS_WITH_UPGRADE = {
+    owner: deployer,
+    proxyContract: 'OpenZeppelinTransparentProxy',
+    methodName: 'postUpgrade'
+  };
+
   // --- Deploy the contract
   const mockErc20Deploy = await deploy('MockERC20', {
     from: deployer,
@@ -57,6 +63,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   }
 
   const ledgerDeploy = await deploy('Ledger', {
+    contract: 'LedgerUpgradeable',
+    proxy: PROXY_SETTINGS_WITH_UPGRADE,
     from: deployer,
     log: true,
     autoMine: true
@@ -67,7 +75,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   }
 
   const assetErc20Deploy = await deploy('Asset', {
-    contract: 'Asset',
+    contract: 'AssetUpgradeableV1',
+    proxy: PROXY_SETTINGS_WITH_UPGRADE,
     from: deployer,
     log: true,
     autoMine: true,
@@ -83,7 +92,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   }
 
   const assetWrappedErc20Deploy = await deploy('WrappedAsset', {
-    contract: 'Asset',
+    contract: 'AssetUpgradeableV1',
+    proxy: PROXY_SETTINGS_WITH_UPGRADE,
     from: deployer,
     log: true,
     autoMine: true,
@@ -99,6 +109,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   }
 
   const winPayDeploy = await deploy('WinPay', {
+    contract: 'WinPayUpgradeable',
+    proxy: PROXY_SETTINGS_WITH_UPGRADE,
     from: deployer,
     log: true,
     autoMine: true,
