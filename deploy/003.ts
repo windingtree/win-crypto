@@ -116,6 +116,61 @@ const tokens: NetworkTokens = {
       address: '0x08E6d1F0c4877Ef2993Ad733Fc6F1D022d0E9DBf',
       isWrapped: 0
     },
+    {
+      token: 'jBGN',
+      address: '0x60E91fc3a60362ca44aea0263DBc4b96302f6ADe',
+      isWrapped: 0
+    },
+    {
+      token: 'jCNY',
+      address: '0x84526c812D8f6c4fD6C1a5B68713AFF50733E772',
+      isWrapped: 0
+    },
+    {
+      token: 'jCOP',
+      address: '0xE6d222caAed5F5DD73A9713AC91C95782e80ACBf',
+      isWrapped: 0
+    },
+    {
+      token: 'jKRW',
+      address: '0xa22f6bc96f13bcC84dF36109c973d3c0505a067E',
+      isWrapped: 0
+    },
+    {
+      token: 'jMXN',
+      address: '0xBD1fe73e1f12bD2bc237De9b626F056f21f86427',
+      isWrapped: 0
+    },
+    {
+      token: 'jNGN',
+      address: '0x182C76e977161f703Bb8f111047dF6C43CFaCc56',
+      isWrapped: 0
+    },
+    {
+      token: 'jNZD',
+      address: '0x6b526Daf03B4C47AF2bcc5860B12151823Ff70E0',
+      isWrapped: 0
+    },
+    {
+      token: 'jPHP',
+      address: '0x486880FB16408b47f928F472f57beC55AC6089d1',
+      isWrapped: 0
+    },
+    {
+      token: 'jXAF',
+      address: '0x98fAb5d1366DE24f152ea683A1f23338351C47EA',
+      isWrapped: 0
+    },
+    {
+      token: 'jXOF',
+      address: '0x4A1E068BC23fAeC08a5817A2A58258e3378d36f0',
+      isWrapped: 0
+    },
+    {
+      token: 'BRZ',
+      address: '0x491a4eB4f1FC3BfF8E1d2FC856a6A46663aD556f',
+      isWrapped: 0
+    }
   ],
 };
 
@@ -204,8 +259,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const auth = await ledger.auth(address);
     if (auth.eq(ethers.BigNumber.from(0))) {
       await ledger.rely(address, { from: deployer });
+      console.log('Authorized:', address);
+    } else {
+      console.log('Already Authorized:', address);
     }
-    console.log('Authorized:', address);
   }
 };
 
