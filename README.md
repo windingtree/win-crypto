@@ -75,24 +75,7 @@ yarn hardhat node
 
 ## Deployments
 
-### Staging: Sokol
-
-- `Ledger`: 0x3196f354b7a95413E30889D1C6cE5074b10c43f5
-- `WinPay`: 0x6f2fBD652A99Db4b8143c8383Ae39b5459268685
-- `MockERC20`: 0x0462C345320C7Ed3071cd1426e6B62472C5bA96d
-- `MockWERC20`: 0x63CD2DF580Df5509806A204090eDdCc6F3493Bf5
-- `Asset (MockERC20)`: 0x1C375919362730AC69c5ACffeC775F11c9b75cF2
-- `Asset (MockWERC20)`: 0x25149dE5afe2043C61687AD136527d2167EFC241
-
-### Production: Gnosis Chain
-
-- `Ledger`: 0xc2024b4Ff3764b8AEb5FCfB4f248124B80A2367a
-- `WinPay`: 0x5C0B415099ce28ce621E6525558704F89ABef71E
-- `Wrapped xDAI Asset`: 0x63Ad8dEDe7c16704187F5287744977Cd7E424761
-- `USDC Asset`: 0x73B7D1A3799c8C2a73a15A1a4c079B42E817054a
-- `USDT Asset`: 0x92276d981126e6D055C02fb756EB2fCd8DeC2Cb1
-- `jEUR Asset`: 0xd59ac854Ad85bC9f26208d86E5B3eD3712c44b47
-- `jCHF Asset`: 0x2FfF9CEC2c934511B475be1BF385231d4299cd35
+Deployments info please check from `hardhat-deploy` artifacts that are located in the `./deployments` directory.
 
 ## Commits
 
@@ -147,10 +130,10 @@ Coverage analysis:
 yarn hardhat coverage
 ```
 
-Run deploy scripts and deploy to `mainnet`:
+Run deploy scripts and deploy to `polygon`:
 
 ```
-yarn hardhat deploy --network mainnet
+yarn hardhat deploy --network polygon
 ```
 
 Now verify the contracts on Etherscan:
