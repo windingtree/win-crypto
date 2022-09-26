@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { AssetUpgradeable, AssetUpgradeable__factory, MockERC20, MockWrappedERC20 } from '../typechain';
+import { AssetUpgradeable__factory, MockERC20, MockWrappedERC20 } from '../typechain';
 import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
 

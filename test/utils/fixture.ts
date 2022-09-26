@@ -1,4 +1,4 @@
-import { MockERC20, MockWrappedERC20, AssetUpgradeableV2, AssetUpgradeable, LedgerUpgradeable, WinPayUpgradeable } from '../../typechain';
+import { MockERC20, MockWrappedERC20, AssetUpgradeable, LedgerUpgradeable, WinPayUpgradeable } from '../../typechain';
 import { ethers, getNamedAccounts, deployments } from 'hardhat';
 import { setupUsers } from './';
 
