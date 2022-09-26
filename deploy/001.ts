@@ -77,47 +77,47 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   }
 
   const deployAsset = async (name: string, ercAddress: string, isWrapped: number) => {
-    // // Asset V1
-    // let assetErc20Deploy = await deploy(name, {
-    //   contract: 'AssetUpgradeableV1',
-    //   proxy: {
-    //     ...PROXY_SETTINGS_WITH_UPGRADE,
-    //     methodName: 'postUpgrade'
-    //   },
-    //   from: deployer,
-    //   log: true,
-    //   autoMine: true,
-    //   args: [ledgerDeploy.address, ercAddress, isWrapped]
-    // });
+    // Asset V1
+    let assetErc20Deploy = await deploy(name, {
+      contract: 'AssetUpgradeableV1',
+      proxy: {
+        ...PROXY_SETTINGS_WITH_UPGRADE,
+        methodName: 'postUpgrade'
+      },
+      from: deployer,
+      log: true,
+      autoMine: true,
+      args: [ledgerDeploy.address, ercAddress, isWrapped]
+    });
 
-    // if (assetErc20Deploy.newlyDeployed) {
-    //   console.log(
-    //     `Contract ${name} V1 (erc20) deployed at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
-    //   );
+    if (assetErc20Deploy.newlyDeployed) {
+      console.log(
+        `Contract ${name} V1 (erc20) deployed at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
+      );
 
-    //   await execute('Ledger', { from: deployer, log: true }, 'rely', assetErc20Deploy.address);
-    // }
+      await execute('Ledger', { from: deployer, log: true }, 'rely', assetErc20Deploy.address);
+    }
 
-    // // Asset upgrade V1 -> V2
-    // assetErc20Deploy = await deploy(name, {
-    //   contract: 'AssetUpgradeableV2',
-    //   proxy: {
-    //     ...PROXY_SETTINGS_WITH_UPGRADE
-    //   },
-    //   from: deployer,
-    //   log: true,
-    //   autoMine: true,
-    //   args: [ledgerDeploy.address, ercAddress, isWrapped]
-    // });
+    // Asset upgrade V1 -> V2
+    assetErc20Deploy = await deploy(name, {
+      contract: 'AssetUpgradeableV2',
+      proxy: {
+        ...PROXY_SETTINGS_WITH_UPGRADE
+      },
+      from: deployer,
+      log: true,
+      autoMine: true,
+      args: [ledgerDeploy.address, ercAddress, isWrapped]
+    });
 
-    // if (assetErc20Deploy.newlyDeployed) {
-    //   console.log(
-    //     `Contract ${name} (erc20) upgraded from V1 to V2 at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
-    //   );
-    // }
+    if (assetErc20Deploy.newlyDeployed) {
+      console.log(
+        `Contract ${name} (erc20) upgraded from V1 to V2 at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
+      );
+    }
 
     // Asset upgrade V2 -> V3
-    const assetErc20Deploy = await deploy(name, {
+    assetErc20Deploy = await deploy(name, {
       contract: 'AssetUpgradeable',
       proxy: {
         ...PROXY_SETTINGS_WITH_UPGRADE
