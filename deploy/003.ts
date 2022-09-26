@@ -1,4 +1,4 @@
-import { LedgerUpgradeable__factory } from '../typechain';
+import { LedgerUpgradeable__factory, AssetUpgradeable__factory } from '../typechain';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
 import { ethers, network } from 'hardhat';
@@ -193,7 +193,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // Setup Ledger
   const ledgerDeploy = await deploy('Ledger', {
     contract: 'LedgerUpgradeable',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE,
+    proxy: {
+      ...PROXY_SETTINGS_WITH_UPGRADE,
+      methodName: 'postUpgrade'
+    },
     from: deployer,
     log: true,
     autoMine: true
@@ -223,6 +226,70 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       );
     }
 
+    const assetFactory = await ethers.getContractFactory<AssetUpgradeable__factory>('AssetUpgradeable');
+    const assetContract = assetFactory.attach(assetDeploy.address);
+
+    const isAuth = await assetContract.auth(deployer);
+
+    if (isAuth.toNumber() === 0) {
+      console.log('Deployer not authorized', isAuth.toString());
+      await assetContract['postUpgrade(address,address,uint256)'](
+        ledgerAddress,
+        asset.address,
+        asset.isWrapped,
+        {
+          from: deployer
+        }
+      );
+      await new Promise(resolve => setTimeout(resolve, 2000));// node need some time to adopt updates
+    }
+
+    const savedAsset = await assetContract.asset();
+
+    if (ethers.utils.getAddress(savedAsset) !== ethers.utils.getAddress(asset.address)) {
+      console.log(`Asset address is wrong: ${ethers.utils.getAddress(savedAsset)} while expected ${ethers.utils.getAddress(asset.address)}`);
+      await assetContract['set(bytes32,address)'](
+        ethers.utils.formatBytes32String('asset'),
+        asset.address,
+        {
+          from: deployer
+        }
+      );
+      console.log(`Fixed ${asset.token.toUpperCase()}Asset asset address: ${asset.address}`);
+    } else {
+      console.log(`Asset address of ${asset.token.toUpperCase()} is OK: ${savedAsset}`);
+    }
+
+    const savedLedger = await assetContract.ledger();
+
+    if (savedLedger !== ledgerAddress) {
+      await assetContract['set(bytes32,address)'](
+        ethers.utils.formatBytes32String('ledger'),
+        ledgerAddress,
+        {
+          from: deployer
+        }
+      );
+      console.log(`Fixed ${asset.token.toUpperCase()}Asset ledger address: ${asset.address}`);
+    } else {
+      console.log(`Ledger address of ${asset.token.toUpperCase()} is OK: ${savedLedger}`);
+    }
+
+    const savedWrapped = await assetContract.wrapped();
+
+    if (savedWrapped.toNumber() !== asset.isWrapped) {
+      await assetContract['set(bytes32,uint256)'](
+        ethers.utils.formatBytes32String('ledger'),
+        asset.isWrapped,
+        {
+          from: deployer
+        }
+      );
+      console.log(`Fixed ${asset.token.toUpperCase()}Asset wrapped flag: ${asset.isWrapped}`);
+    } else {
+      console.log(`IsWrapped flag of ${asset.token.toUpperCase()} is OK: ${savedWrapped.toNumber()}`);
+    }
+
     authorizedAddresses.push(assetDeploy.address);
   };
 
@@ -236,7 +303,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // Setup WinPay contract
   const winPayDeploy = await deploy('WinPay', {
     contract: 'WinPayUpgradeable',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE,
+    proxy: {
+      ...PROXY_SETTINGS_WITH_UPGRADE,
+      execute: {
+        methodName: 'postUpgrade',
+        args: [ledgerDeploy.address]
+      }
+    },
     from: deployer,
     log: true,
     autoMine: true,

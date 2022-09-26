@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { MockERC20, MockWrappedERC20 } from '../typechain';
+import { AssetUpgradeable, AssetUpgradeable__factory, MockERC20, MockWrappedERC20 } from '../typechain';
 import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
 
@@ -22,8 +22,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const PROXY_SETTINGS_WITH_UPGRADE = {
     owner: deployer,
-    proxyContract: 'OpenZeppelinTransparentProxy',
-    methodName: 'postUpgrade'
+    proxyContract: 'OpenZeppelinTransparentProxy'
   };
 
   // --- Deploy the contract
@@ -64,7 +63,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const ledgerDeploy = await deploy('Ledger', {
     contract: 'LedgerUpgradeable',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE,
+    proxy: {
+      ...PROXY_SETTINGS_WITH_UPGRADE,
+      methodName: 'postUpgrade'
+    },
     from: deployer,
     log: true,
     autoMine: true
@@ -74,43 +76,115 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     console.log(`Contract Ledger deployed at ${ledgerDeploy.address} using ${ledgerDeploy.receipt?.gasUsed} gas`);
   }
 
-  const assetErc20Deploy = await deploy('Asset', {
-    contract: 'AssetUpgradeableV1',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE,
-    from: deployer,
-    log: true,
-    autoMine: true,
-    args: [ledgerDeploy.address, mockErc20Deploy.address, 0]
-  });
+  const deployAsset = async (name: string, ercAddress: string, isWrapped: number) => {
+    // // Asset V1
+    // let assetErc20Deploy = await deploy(name, {
+    //   contract: 'AssetUpgradeableV1',
+    //   proxy: {
+    //     ...PROXY_SETTINGS_WITH_UPGRADE,
+    //     methodName: 'postUpgrade'
+    //   },
+    //   from: deployer,
+    //   log: true,
+    //   autoMine: true,
+    //   args: [ledgerDeploy.address, ercAddress, isWrapped]
+    // });
 
-  if (assetErc20Deploy.newlyDeployed) {
-    console.log(
-      `Contract Asset (erc20) deployed at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
-    );
+    // if (assetErc20Deploy.newlyDeployed) {
+    //   console.log(
+    //     `Contract ${name} V1 (erc20) deployed at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
+    //   );
 
-    await execute('Ledger', { from: deployer, log: true }, 'rely', assetErc20Deploy.address);
-  }
+    //   await execute('Ledger', { from: deployer, log: true }, 'rely', assetErc20Deploy.address);
+    // }
 
-  const assetWrappedErc20Deploy = await deploy('WrappedAsset', {
-    contract: 'AssetUpgradeableV1',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE,
-    from: deployer,
-    log: true,
-    autoMine: true,
-    args: [ledgerDeploy.address, mockWrappedErc20Deploy.address, 1]
-  });
+    // // Asset upgrade V1 -> V2
+    // assetErc20Deploy = await deploy(name, {
+    //   contract: 'AssetUpgradeableV2',
+    //   proxy: {
+    //     ...PROXY_SETTINGS_WITH_UPGRADE
+    //   },
+    //   from: deployer,
+    //   log: true,
+    //   autoMine: true,
+    //   args: [ledgerDeploy.address, ercAddress, isWrapped]
+    // });
 
-  if (assetWrappedErc20Deploy.newlyDeployed) {
-    console.log(
-      `Contract Asset (wrappedErc20) deployed at ${assetWrappedErc20Deploy.address} using ${assetWrappedErc20Deploy.receipt?.gasUsed} gas`
-    );
+    // if (assetErc20Deploy.newlyDeployed) {
+    //   console.log(
+    //     `Contract ${name} (erc20) upgraded from V1 to V2 at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
+    //   );
+    // }
 
-    await execute('Ledger', { from: deployer, log: true }, 'rely', assetWrappedErc20Deploy.address);
-  }
+    // Asset upgrade V2 -> V3
+    const assetErc20Deploy = await deploy(name, {
+      contract: 'AssetUpgradeable',
+      proxy: {
+        ...PROXY_SETTINGS_WITH_UPGRADE
+      },
+      from: deployer,
+      log: true,
+      autoMine: true,
+      args: [ledgerDeploy.address, ercAddress, isWrapped]
+    });
+
+    if (assetErc20Deploy.newlyDeployed) {
+      console.log(
+        `Contract ${name} (erc20) upgraded from V2 to V3 at ${assetErc20Deploy.address} using ${assetErc20Deploy.receipt?.gasUsed} gas`
+      );
+    }
+
+    const assetFactory = await ethers.getContractFactory<AssetUpgradeable__factory>('AssetUpgradeable');
+    const asset = assetFactory.attach(assetErc20Deploy.address);
+    const assetAddress = await asset.asset();
+
+    if (assetAddress !== ercAddress) {
+      await asset['set(bytes32,address)'](
+        utils.formatBytes32String('asset'),
+        ercAddress,
+        {
+          from: deployer
+        }
+      );
+      console.log('Fixed asset address:', ercAddress);
+    }
+
+    const ledgerAddress = await asset.ledger();
+
+    if (ledgerAddress !== ledgerDeploy.address) {
+      await asset['set(bytes32,address)'](
+        utils.formatBytes32String('ledger'),
+        ledgerDeploy.address,
+        {
+          from: deployer
+        }
+      );
+      console.log('Fixed ledger address:', ercAddress);
+    }
+
+    const wrapped = await asset.wrapped();
+
+    if (wrapped.toNumber() !== isWrapped) {
+      await asset['set(bytes32,uint256)'](
+        utils.formatBytes32String('wrapped'),
+        isWrapped,
+        {
+          from: deployer
+        }
+      );
+      console.log('Fixed ledger address:', ercAddress);
+    }
+  };
+
+  await deployAsset('Asset', mockErc20Deploy.address, 0);
+  await deployAsset('WrappedAsset', mockWrappedErc20Deploy.address, 1);
 
   const winPayDeploy = await deploy('WinPay', {
     contract: 'WinPayUpgradeable',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE,
+    proxy: {
+      ...PROXY_SETTINGS_WITH_UPGRADE,
+      methodName: 'postUpgrade'
+    },
     from: deployer,
     log: true,
     autoMine: true,
