@@ -1,6 +1,5 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { MockERC20Dec18 } from '../typechain';
 import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
 
