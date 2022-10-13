@@ -11,8 +11,8 @@ describe('MockWrappedERC20', function () {
 
   context('Metadata', () => {
     it('sets symbol correctly', async () => {
-      expect(await alice.wrappedErc20.symbol()).to.be.eq('WMTK');
-      expect(await alice.wrappedErc20.name()).to.be.eq('MockWERC20');
+      expect(await alice.wrappedErc20.symbol()).to.be.eq('MockWrappedERC20Dec18');
+      expect(await alice.wrappedErc20.name()).to.be.eq('MockWrappedERC20Dec18');
     });
   });
 

@@ -2,7 +2,7 @@ import { expect } from './chai-setup';
 import { utils } from 'ethers';
 import { setup, AccountWithContract } from './utils/fixture';
 
-describe('MockERC20', function () {
+describe('MockERC20Dec18', function () {
   let alice: AccountWithContract;
   let bob: AccountWithContract;
   let carol: AccountWithContract;
@@ -13,8 +13,8 @@ describe('MockERC20', function () {
 
   context('Metadata', () => {
     it('sets symbol correctly', async () => {
-      expect(await alice.erc20.symbol()).to.be.eq('MTK');
-      expect(await alice.erc20.name()).to.be.eq('MockERC20');
+      expect(await alice.erc20.symbol()).to.be.eq('MockERC20Dec18Permit');
+      expect(await alice.erc20.name()).to.be.eq('MockERC20Dec18Permit');
     });
   });
 

@@ -21,6 +21,7 @@ coverage*
 inheritance-graph.dot
 docs
 dist
+temp
 
 # dotenv
 .env*

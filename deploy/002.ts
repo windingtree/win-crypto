@@ -1,8 +1,60 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { MockERC20 } from '../typechain';
+import { MockERC20Dec18 } from '../typechain';
 import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
+
+export interface TestTokenConfig {
+  name: string;
+  symbol: string;
+  contract: string;
+  isWrapped: number;
+}
+
+export interface TestNetworkTokens {
+  [network: string]: TestTokenConfig[]
+}
+
+const tokens: TestNetworkTokens = {
+  sokol: [
+    {
+      name: 'wxDAI',
+      symbol: 'wxDAI',
+      contract: 'MockWrappedERC20Dec18Upgradeable',
+      isWrapped: 1
+    },
+    {
+      name: 'USDC',
+      symbol: 'USDC',
+      contract: 'MockERC20Dec6PermitUpgradeable',
+      isWrapped: 0
+    },
+    {
+      name: 'EURs',
+      symbol: 'EURs',
+      contract: 'MockERC20Dec18Upgradeable',
+      isWrapped: 0
+    },
+    {
+      name: 'JPYC',
+      symbol: 'JPYC',
+      contract: 'MockERC20Dec18PermitUpgradeable',
+      isWrapped: 0
+    },
+  ]
+};
+
+const defaultTokensMint = utils.parseEther('10000000');
+
+const mockErc20Holders: string[] = [
+  '0x2aAe83D2e734fA7A586C1C981175DFAb551fb512',
+  '0xA0B74BFE28223c9e08d6DBFa74B5bf4Da763f959',
+  '0xb9C79303DC35548bCc9dDf7cF324bBdBC824F2E7',
+  '0x9366f31ff654e79044FD49a25263b033f54258c5',
+  '0xfE9d41f8CE7AE32b440FB3E80055Fdde582A8f83',
+  '0x593f8Cd15328199034C113b9215E68B55E01696F',
+  '0xc6FCb95243a68bb41722AcF5C45cFAA6835deb78'
+];
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   if (!['sokol'].includes(network.name)) {
@@ -15,24 +67,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getNamedAccounts();
   console.log(`Deployer: ${deployer}`);
 
-  // Add here some test addresses. These addresses will be loaded with test USDC
-  const mockErc20Holders: string[] = [];
-
-  const PROXY_SETTINGS_WITH_UPGRADE_TOKENS = {
-    owner: deployer,
-    proxyContract: 'OpenZeppelinTransparentProxy',
-    execute: {
-      init: {
-        methodName: 'initialize',
-        args: []
-      }
-    }
-  };
-
   const PROXY_SETTINGS_WITH_UPGRADE = {
     owner: deployer,
-    proxyContract: 'OpenZeppelinTransparentProxy',
-    methodName: 'postUpgrade'
+    proxyContract: 'OpenZeppelinTransparentProxy'
   };
 
   // Asset addresses
@@ -41,7 +78,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // Setup Ledger
   const ledgerDeploy = await deploy('Ledger', {
     contract: 'LedgerUpgradeable',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE,
+    proxy: {
+      ...PROXY_SETTINGS_WITH_UPGRADE,
+      methodName: 'postUpgrade'
+    },
     from: deployer,
     log: true,
     autoMine: true
@@ -51,98 +91,71 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     console.log(`Contract Ledger deployed at ${ledgerDeploy.address} using ${ledgerDeploy.receipt?.gasUsed} gas`);
   }
 
-  // Setup MockERC20 (USDC) exists in both `sokol` and `polygon_mumbai`
-  const usdcDeploy = await deploy('USDC', {
-    contract: 'MockERC20Upgradeable',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE_TOKENS,
-    from: deployer,
-    log: true,
-    autoMine: true
-  });
+  // Setup Asset contract for token
+  const deployAsset = async (token: TestTokenConfig, tokenAddress: string): Promise<void> => {
+    const asset = `${token.symbol}Asset`;
+    const assetDeploy = await deploy(asset, {
+      contract: 'AssetUpgradeable',
+      proxy: PROXY_SETTINGS_WITH_UPGRADE,
+      from: deployer,
+      log: true,
+      autoMine: true,
+      args: [ledgerDeploy.address, tokenAddress, token.isWrapped]
+    });
 
-  if (usdcDeploy.newlyDeployed) {
-    console.log(`Token USDC deployed at ${usdcDeploy.address} using ${usdcDeploy.receipt?.gasUsed} gas`);
+    if (assetDeploy.newlyDeployed) {
+      console.log(
+        `Contract ${token.symbol}Asset deployed at ${assetDeploy.address} using ${assetDeploy.receipt?.gasUsed} gas`
+      );
+    }
 
-    const erc20Factory = await ethers.getContractFactory('MockERC20Upgradeable');
-    const erc20 = erc20Factory.attach(usdcDeploy.address) as MockERC20;
+    authorizedAddresses.push(assetDeploy.address);
 
-    // mint tokens to each address
-    const NUM_TOKENS = utils.parseEther('1000000');
-    await Promise.all(mockErc20Holders.map((address) => erc20.mint(address, NUM_TOKENS)));
-  }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  };
 
-  // Setup asset contract for MockERC20
-  const usdcAssetDeploy = await deploy('USDCAsset', {
-    contract: 'AssetUpgradeable',
-    proxy: PROXY_SETTINGS_WITH_UPGRADE,
-    from: deployer,
-    log: true,
-    autoMine: true,
-    args: [ledgerDeploy.address, usdcDeploy.address, 0]
-  });
-
-  if (usdcAssetDeploy.newlyDeployed) {
-    console.log(
-      `Contract USDC Asset deployed at ${usdcAssetDeploy.address} using ${usdcAssetDeploy.receipt?.gasUsed} gas`
-    );
-
-    authorizedAddresses.push(usdcAssetDeploy.address);
-  }
-
-  // Sokol specific deployments
-  if (network.name === 'sokol') {
-    // Setup wrapped token MockWrappedERC20 only for `sokol`
-    const wxdaiDeploy = await deploy('WXDAI', {
-      contract: 'MockWrappedERC20Upgradeable',
-      proxy: PROXY_SETTINGS_WITH_UPGRADE_TOKENS,
+  const deployToken = async (token: TestTokenConfig): Promise<void> => {
+    const tokenDeploy = await deploy(`${token.symbol}`, {
+      contract: token.contract,
+      proxy: {
+        ...PROXY_SETTINGS_WITH_UPGRADE,
+        execute: {
+          init: {
+            methodName: 'initialize',
+            args: [token.name, token.symbol]
+          }
+        }
+      },
       from: deployer,
       log: true,
       autoMine: true
     });
 
-    if (wxdaiDeploy.newlyDeployed) {
-      console.log(`Token WXDAI deployed at ${wxdaiDeploy.address} using ${wxdaiDeploy.receipt?.gasUsed} gas`);
-    }
-
-    // Setup wrapped asset contract for MockWrappedERC20
-    const wxdaiAssetDeploy = await deploy('WXDAIAsset', {
-      contract: 'AssetUpgradeable',
-      proxy: PROXY_SETTINGS_WITH_UPGRADE,
-      from: deployer,
-      log: true,
-      autoMine: true,
-      args: [ledgerDeploy.address, wxdaiDeploy.address, 1]
-    });
-
-    if (wxdaiAssetDeploy.newlyDeployed) {
+    if (tokenDeploy.newlyDeployed) {
       console.log(
-        `Contract WXDAI Asset deployed at ${wxdaiAssetDeploy.address} using ${wxdaiAssetDeploy.receipt?.gasUsed} gas`
+        `Token ${token.symbol} deployed at ${tokenDeploy.address} using ${tokenDeploy.receipt?.gasUsed} gas`
       );
 
-      authorizedAddresses.push(wxdaiAssetDeploy.address);
+      for (const holderAddress of mockErc20Holders) {
+        await execute(
+          token.symbol,
+          { from: deployer, log: true },
+          'mint',
+          holderAddress,
+          defaultTokensMint
+        );
+        console.log(`Holder ${holderAddress} gets ${defaultTokensMint.toString()} ${token.symbol}`);
+      }
     }
-  }
 
-  // Polygon Mumbai specific deployments
-  if (network.name === 'polygon_mumbai') {
-    // For the Mumbai network we already know address of EURe
-    const EURE_ADDRESS = '0xCF487EFd00B70EaC8C28C654356Fb0E387E66D62'; // EURe
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Setup asset contract for MockERC20
-    const eureDeploy = await deploy('ERC20Asset', {
-      contract: 'AssetUpgradeable',
-      proxy: PROXY_SETTINGS_WITH_UPGRADE,
-      from: deployer,
-      log: true,
-      autoMine: true,
-      args: [ledgerDeploy.address, EURE_ADDRESS, 0]
-    });
+    await deployAsset(token, tokenDeploy.address);
+  };
 
-    if (eureDeploy.newlyDeployed) {
-      console.log(`Contract EURe Asset deployed at ${eureDeploy.address} using ${eureDeploy.receipt?.gasUsed} gas`);
-
-      authorizedAddresses.push(eureDeploy.address);
-    }
+  // Setup tokens
+  for (const token of tokens[network.name]) {
+    await deployToken(token);
   }
 
   // Setup WinPay contract
@@ -161,12 +174,27 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     authorizedAddresses.push(winPayDeploy.address);
   }
 
-  // Authorize required addresses on the Ledger contract
-  await Promise.all(
-    authorizedAddresses.map((address) => execute('Ledger', { from: deployer, log: true }, 'rely', address))
-  );
+  // await execute(
+  //   'WinPay',
+  //   { from: deployer, log: true },
+  //   'register',
+  //   '0x394e5c06a83eeea7fd8e0e50bb1ff1f13bec1a4e353a9a0f6db9dea030bcbef3',
+  //   deployer
+  // );
 
-  await execute('WinPay', { from: deployer, log: true }, 'register', utils.keccak256(utils.formatBytes32String('win_win_provider')), deployer);
+  const ledgerFactory = await ethers.getContractFactory('LedgerUpgradeable');
+  const ledger = ledgerFactory.attach(ledgerDeploy.address);
+
+  // Authorize required addresses on the Ledger contract
+  for (const address of authorizedAddresses) {
+    const auth = await ledger.auth(address);
+    if (auth.eq(ethers.BigNumber.from(0))) {
+      await execute('Ledger', { from: deployer, log: true }, 'rely', address);
+      console.log(`Authorized on Ledger: ${address}`);
+    } else {
+      console.log('Already Authorized:', address);
+    }
+  }
 };
 
 export default func;
