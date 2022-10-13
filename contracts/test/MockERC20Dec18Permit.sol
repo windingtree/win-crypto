@@ -6,7 +6,6 @@ import './MockERC20Dec18.sol';
 
 /// @custom:security-contact security@windingtree.com
 contract MockERC20Dec18Permit is MockERC20Dec18, ERC20Permit {
-
   constructor(string memory name, string memory symbol) MockERC20Dec18(name, symbol) ERC20Permit(name) {}
 
   function _beforeTokenTransfer(

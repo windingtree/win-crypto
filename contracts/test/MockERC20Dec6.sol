@@ -5,7 +5,6 @@ import './MockERC20Dec18.sol';
 
 /// @custom:security-contact security@windingtree.com
 contract MockERC20Dec6 is MockERC20Dec18 {
-
   constructor(string memory name, string memory symbol) MockERC20Dec18(name, symbol) {}
 
   function decimals() public pure override(ERC20) returns (uint8) {

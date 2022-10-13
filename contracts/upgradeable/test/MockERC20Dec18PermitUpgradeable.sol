@@ -5,10 +5,7 @@ import '@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20Pe
 import './MockERC20Dec18Upgradeable.sol';
 
 /// @custom:security-contact security@windingtree.com
-contract MockERC20Dec18PermitUpgradeable is
-  MockERC20Dec18Upgradeable,
-  ERC20PermitUpgradeable
-{
+contract MockERC20Dec18PermitUpgradeable is MockERC20Dec18Upgradeable, ERC20PermitUpgradeable {
   function initialize(string memory name, string memory symbol) public override initializer {
     super.initialize(name, symbol);
     __ERC20Permit_init(name);

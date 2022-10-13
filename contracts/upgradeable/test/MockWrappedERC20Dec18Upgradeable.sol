@@ -4,8 +4,7 @@ pragma solidity ^0.8.13;
 import './MockERC20Dec18Upgradeable.sol';
 
 /// @custom:security-contact security@windingtree.com
-contract MockWrappedERC20Dec18Upgradeable is MockERC20Dec18Upgradeable
-{
+contract MockWrappedERC20Dec18Upgradeable is MockERC20Dec18Upgradeable {
   event Deposit(address indexed dst, uint256 wad);
   event Withdrawal(address indexed src, uint256 wad);
 

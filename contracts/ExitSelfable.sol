@@ -4,7 +4,6 @@ pragma solidity ^0.8.13;
 import {Asset} from './Asset.sol';
 
 abstract contract ExitSelfable is Asset {
-
   /// @dev Withdraws self owned funds
   /// @param dst Asset destination address (balance owner)
   function exitSelf(address dst) external authorized {
