@@ -12,7 +12,7 @@ export interface TestTokenConfig {
 }
 
 export interface TestNetworkTokens {
-  [network: string]: TestTokenConfig[]
+  [network: string]: TestTokenConfig[];
 }
 
 const tokens: TestNetworkTokens = {
@@ -40,7 +40,7 @@ const tokens: TestNetworkTokens = {
       symbol: 'JPYC',
       contract: 'MockERC20Dec18PermitUpgradeable',
       isWrapped: 0
-    },
+    }
   ]
 };
 
@@ -103,7 +103,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
     authorizedAddresses.push(assetDeploy.address);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
   const deployToken = async (token: TestTokenConfig): Promise<void> => {
@@ -124,23 +124,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     });
 
     if (tokenDeploy.newlyDeployed) {
-      console.log(
-        `Token ${token.symbol} deployed at ${tokenDeploy.address} using ${tokenDeploy.receipt?.gasUsed} gas`
-      );
+      console.log(`Token ${token.symbol} deployed at ${tokenDeploy.address} using ${tokenDeploy.receipt?.gasUsed} gas`);
 
       for (const holderAddress of mockErc20Holders) {
-        await execute(
-          token.symbol,
-          { from: deployer, log: true },
-          'mint',
-          holderAddress,
-          defaultTokensMint
-        );
+        await execute(token.symbol, { from: deployer, log: true }, 'mint', holderAddress, defaultTokensMint);
         console.log(`Holder ${holderAddress} gets ${defaultTokensMint.toString()} ${token.symbol}`);
       }
     }
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     await deployAsset(token, tokenDeploy.address);
   };

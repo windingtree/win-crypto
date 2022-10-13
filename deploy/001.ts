@@ -141,39 +141,27 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const assetAddress = await asset.asset();
 
     if (assetAddress !== ercAddress) {
-      await asset['set(bytes32,address)'](
-        utils.formatBytes32String('asset'),
-        ercAddress,
-        {
-          from: deployer
-        }
-      );
+      await asset['set(bytes32,address)'](utils.formatBytes32String('asset'), ercAddress, {
+        from: deployer
+      });
       console.log('Fixed asset address:', ercAddress);
     }
 
     const ledgerAddress = await asset.ledger();
 
     if (ledgerAddress !== ledgerDeploy.address) {
-      await asset['set(bytes32,address)'](
-        utils.formatBytes32String('ledger'),
-        ledgerDeploy.address,
-        {
-          from: deployer
-        }
-      );
+      await asset['set(bytes32,address)'](utils.formatBytes32String('ledger'), ledgerDeploy.address, {
+        from: deployer
+      });
       console.log('Fixed ledger address:', ercAddress);
     }
 
     const wrapped = await asset.wrapped();
 
     if (wrapped.toNumber() !== isWrapped) {
-      await asset['set(bytes32,uint256)'](
-        utils.formatBytes32String('wrapped'),
-        isWrapped,
-        {
-          from: deployer
-        }
-      );
+      await asset['set(bytes32,uint256)'](utils.formatBytes32String('wrapped'), isWrapped, {
+        from: deployer
+      });
       console.log('Fixed ledger address:', ercAddress);
     }
   };
@@ -197,7 +185,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     console.log(`Contract WinPay deployed at ${winPayDeploy.address} using ${winPayDeploy.receipt?.gasUsed} gas`);
 
     await execute('Ledger', { from: deployer, log: true }, 'rely', winPayDeploy.address);
-    await execute('WinPay', { from: deployer, log: true }, 'register', utils.keccak256(utils.formatBytes32String('win_win_provider')), deployer);
+    await execute(
+      'WinPay',
+      { from: deployer, log: true },
+      'register',
+      utils.keccak256(utils.formatBytes32String('win_win_provider')),
+      deployer
+    );
   }
 };
 
