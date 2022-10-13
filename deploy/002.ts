@@ -46,15 +46,7 @@ const tokens: TestNetworkTokens = {
 
 const defaultTokensMint = utils.parseEther('10000000');
 
-const mockErc20Holders: string[] = [
-  '0x2aAe83D2e734fA7A586C1C981175DFAb551fb512',
-  '0xA0B74BFE28223c9e08d6DBFa74B5bf4Da763f959',
-  '0xb9C79303DC35548bCc9dDf7cF324bBdBC824F2E7',
-  '0x9366f31ff654e79044FD49a25263b033f54258c5',
-  '0xfE9d41f8CE7AE32b440FB3E80055Fdde582A8f83',
-  '0x593f8Cd15328199034C113b9215E68B55E01696F',
-  '0xc6FCb95243a68bb41722AcF5C45cFAA6835deb78'
-];
+const mockErc20Holders: string[] = [];
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   if (!['sokol'].includes(network.name)) {
