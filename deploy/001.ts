@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { AssetUpgradeable__factory, MockERC20, MockWrappedERC20 } from '../typechain';
+import { MockERC20Dec18, MockWrappedERC20Dec18 } from '../typechain';
 import { ethers, network } from 'hardhat';
 import { utils } from 'ethers';
 
@@ -26,39 +26,41 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   };
 
   // --- Deploy the contract
-  const mockErc20Deploy = await deploy('MockERC20', {
+  const mockErc20Deploy = await deploy('MockERC20Dec18Permit', {
     from: deployer,
+    args: ['MockERC20Dec18Permit', 'MockERC20Dec18Permit'],
     log: true,
     autoMine: true
   });
 
   if (mockErc20Deploy.newlyDeployed) {
     console.log(
-      `Contract MockERC20 deployed at ${mockErc20Deploy.address} using ${mockErc20Deploy.receipt?.gasUsed} gas`
+      `Contract MockERC20Dec18Permit deployed at ${mockErc20Deploy.address} using ${mockErc20Deploy.receipt?.gasUsed} gas`
     );
 
-    const erc20Factory = await ethers.getContractFactory('MockERC20');
-    const erc20 = erc20Factory.attach(mockErc20Deploy.address) as MockERC20;
+    const erc20Factory = await ethers.getContractFactory('MockERC20Dec18');
+    const erc20 = erc20Factory.attach(mockErc20Deploy.address) as MockERC20Dec18;
 
     // mint tokens to each address
     const NUM_TOKENS = utils.parseEther('1000000');
     await Promise.all([alice, bob, carol].map((address) => erc20.mint(address, NUM_TOKENS)));
   }
 
-  const mockWrappedErc20Deploy = await deploy('MockWrappedERC20', {
+  const mockWrappedErc20Deploy = await deploy('MockWrappedERC20Dec18', {
     from: deployer,
+    args: ['MockWrappedERC20Dec18', 'MockWrappedERC20Dec18'],
     log: true,
     autoMine: true
   });
 
   if (mockWrappedErc20Deploy.newlyDeployed) {
     console.log(
-      `Contract MockWrappedERC20 deployed at ${mockWrappedErc20Deploy.address} using ${mockWrappedErc20Deploy.receipt?.gasUsed} gas`
+      `Contract MockWrappedERC20Dec18 deployed at ${mockWrappedErc20Deploy.address} using ${mockWrappedErc20Deploy.receipt?.gasUsed} gas`
     );
 
-    const erc20Factory = await ethers.getContractFactory('MockWrappedERC20');
+    const erc20Factory = await ethers.getContractFactory('MockWrappedERC20Dec18');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const wrappedErc20 = erc20Factory.attach(mockErc20Deploy.address) as MockWrappedERC20;
+    const wrappedErc20 = erc20Factory.attach(mockErc20Deploy.address) as MockWrappedERC20Dec18;
   }
 
   const ledgerDeploy = await deploy('Ledger', {
@@ -134,44 +136,32 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       );
     }
 
-    const assetFactory = await ethers.getContractFactory<AssetUpgradeable__factory>('AssetUpgradeable');
+    const assetFactory = await ethers.getContractFactory('AssetUpgradeable');
     const asset = assetFactory.attach(assetErc20Deploy.address);
     const assetAddress = await asset.asset();
 
     if (assetAddress !== ercAddress) {
-      await asset['set(bytes32,address)'](
-        utils.formatBytes32String('asset'),
-        ercAddress,
-        {
-          from: deployer
-        }
-      );
+      await asset['set(bytes32,address)'](utils.formatBytes32String('asset'), ercAddress, {
+        from: deployer
+      });
       console.log('Fixed asset address:', ercAddress);
     }
 
     const ledgerAddress = await asset.ledger();
 
     if (ledgerAddress !== ledgerDeploy.address) {
-      await asset['set(bytes32,address)'](
-        utils.formatBytes32String('ledger'),
-        ledgerDeploy.address,
-        {
-          from: deployer
-        }
-      );
+      await asset['set(bytes32,address)'](utils.formatBytes32String('ledger'), ledgerDeploy.address, {
+        from: deployer
+      });
       console.log('Fixed ledger address:', ercAddress);
     }
 
     const wrapped = await asset.wrapped();
 
     if (wrapped.toNumber() !== isWrapped) {
-      await asset['set(bytes32,uint256)'](
-        utils.formatBytes32String('wrapped'),
-        isWrapped,
-        {
-          from: deployer
-        }
-      );
+      await asset['set(bytes32,uint256)'](utils.formatBytes32String('wrapped'), isWrapped, {
+        from: deployer
+      });
       console.log('Fixed ledger address:', ercAddress);
     }
   };
@@ -195,7 +185,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     console.log(`Contract WinPay deployed at ${winPayDeploy.address} using ${winPayDeploy.receipt?.gasUsed} gas`);
 
     await execute('Ledger', { from: deployer, log: true }, 'rely', winPayDeploy.address);
-    await execute('WinPay', { from: deployer, log: true }, 'register', utils.keccak256(utils.formatBytes32String('win_win_provider')), deployer);
+    await execute(
+      'WinPay',
+      { from: deployer, log: true },
+      'register',
+      utils.keccak256(utils.formatBytes32String('win_win_provider')),
+      deployer
+    );
   }
 };
 

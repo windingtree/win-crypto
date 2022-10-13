@@ -14,7 +14,7 @@ export interface TokenConfig {
 }
 
 export interface NetworkTokens {
-  [network: string]: TokenConfig[]
+  [network: string]: TokenConfig[];
 }
 
 const tokens: NetworkTokens = {
@@ -43,7 +43,7 @@ const tokens: NetworkTokens = {
       token: 'jCHF',
       address: '0x2d5563da42b06fbbf9c67b7dc073cf6a7842239e',
       isWrapped: 0
-    },
+    }
   ],
   polygon: [
     {
@@ -58,17 +58,17 @@ const tokens: NetworkTokens = {
     },
     {
       token: 'USDT',
-      address: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',//no permit
+      address: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', //no permit
       isWrapped: 0
     },
     {
       token: 'EURE',
-      address: '0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6',//no permit
+      address: '0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6', //no permit
       isWrapped: 0
     },
     {
       token: 'EURS',
-      address: '0xe111178a87a3bff0c8d18decba5798827539ae99',//no permit
+      address: '0xe111178a87a3bff0c8d18decba5798827539ae99', //no permit
       isWrapped: 0
     },
     {
@@ -171,7 +171,7 @@ const tokens: NetworkTokens = {
       address: '0x491a4eB4f1FC3BfF8E1d2FC856a6A46663aD556f',
       isWrapped: 0
     }
-  ],
+  ]
 };
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
@@ -221,9 +221,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     });
 
     if (assetDeploy.newlyDeployed) {
-      console.log(
-        `${asset.token} Asset deployed at ${assetDeploy.address} using ${assetDeploy.receipt?.gasUsed} gas`
-      );
+      console.log(`${asset.token} Asset deployed at ${assetDeploy.address} using ${assetDeploy.receipt?.gasUsed} gas`);
     }
 
     const assetFactory = await ethers.getContractFactory<AssetUpgradeable__factory>('AssetUpgradeable');
@@ -233,28 +231,23 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
     if (isAuth.toNumber() === 0) {
       console.log('Deployer not authorized', isAuth.toString());
-      await assetContract['postUpgrade(address,address,uint256)'](
-        ledgerAddress,
-        asset.address,
-        asset.isWrapped,
-        {
-          from: deployer
-        }
-      );
-      await new Promise(resolve => setTimeout(resolve, 2000));// node need some time to adopt updates
+      await assetContract['postUpgrade(address,address,uint256)'](ledgerAddress, asset.address, asset.isWrapped, {
+        from: deployer
+      });
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // node need some time to adopt updates
     }
 
     const savedAsset = await assetContract.asset();
 
     if (ethers.utils.getAddress(savedAsset) !== ethers.utils.getAddress(asset.address)) {
-      console.log(`Asset address is wrong: ${ethers.utils.getAddress(savedAsset)} while expected ${ethers.utils.getAddress(asset.address)}`);
-      await assetContract['set(bytes32,address)'](
-        ethers.utils.formatBytes32String('asset'),
-        asset.address,
-        {
-          from: deployer
-        }
+      console.log(
+        `Asset address is wrong: ${ethers.utils.getAddress(savedAsset)} while expected ${ethers.utils.getAddress(
+          asset.address
+        )}`
       );
+      await assetContract['set(bytes32,address)'](ethers.utils.formatBytes32String('asset'), asset.address, {
+        from: deployer
+      });
       console.log(`Fixed ${asset.token.toUpperCase()}Asset asset address: ${asset.address}`);
     } else {
       console.log(`Asset address of ${asset.token.toUpperCase()} is OK: ${savedAsset}`);
@@ -263,13 +256,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const savedLedger = await assetContract.ledger();
 
     if (savedLedger !== ledgerAddress) {
-      await assetContract['set(bytes32,address)'](
-        ethers.utils.formatBytes32String('ledger'),
-        ledgerAddress,
-        {
-          from: deployer
-        }
-      );
+      await assetContract['set(bytes32,address)'](ethers.utils.formatBytes32String('ledger'), ledgerAddress, {
+        from: deployer
+      });
       console.log(`Fixed ${asset.token.toUpperCase()}Asset ledger address: ${asset.address}`);
     } else {
       console.log(`Ledger address of ${asset.token.toUpperCase()} is OK: ${savedLedger}`);
@@ -278,13 +267,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const savedWrapped = await assetContract.wrapped();
 
     if (savedWrapped.toNumber() !== asset.isWrapped) {
-      await assetContract['set(bytes32,uint256)'](
-        ethers.utils.formatBytes32String('ledger'),
-        asset.isWrapped,
-        {
-          from: deployer
-        }
-      );
+      await assetContract['set(bytes32,uint256)'](ethers.utils.formatBytes32String('ledger'), asset.isWrapped, {
+        from: deployer
+      });
       console.log(`Fixed ${asset.token.toUpperCase()}Asset wrapped flag: ${asset.isWrapped}`);
     } else {
       console.log(`IsWrapped flag of ${asset.token.toUpperCase()} is OK: ${savedWrapped.toNumber()}`);
@@ -297,7 +282,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   for (const asset of tokens[network.name]) {
     await deployAsset(asset, ledgerDeploy.address);
     // Wait before next deployment
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   // Setup WinPay contract
