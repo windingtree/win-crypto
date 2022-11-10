@@ -6,7 +6,8 @@ export const createPermitSignature = async (
   owner: string,
   spender: string,
   value: BigNumber,
-  deadline: number
+  deadline: number,
+  salt?: string
 ): Promise<Signature> => {
   const nonce = await contract.nonces(owner);
   const name = await contract.name();
@@ -19,7 +20,8 @@ export const createPermitSignature = async (
         name,
         version,
         chainId,
-        verifyingContract: contract.address
+        verifyingContract: contract.address,
+        ...salt ? { salt } : {}
       },
       {
         Permit: [
