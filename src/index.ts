@@ -6,11 +6,13 @@ export const createPermitSignature = async (
   owner: string,
   spender: string,
   value: BigNumber,
-  deadline: number
+  deadline: number,
+  salt?: string,
+  versionOverride?: string
 ): Promise<Signature> => {
   const nonce = await contract.nonces(owner);
   const name = await contract.name();
-  const version = '1';
+  const version = versionOverride || '1';
   const chainId = await signer.getChainId();
 
   return ethers.utils.splitSignature(
@@ -19,7 +21,8 @@ export const createPermitSignature = async (
         name,
         version,
         chainId,
-        verifyingContract: contract.address
+        verifyingContract: contract.address,
+        ...salt ? { salt } : {}
       },
       {
         Permit: [
